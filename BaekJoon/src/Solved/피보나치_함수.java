@@ -5,49 +5,38 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 public class 피보나치_함수 {
-	static int cnt0;
-	static int cnt1;
-	static int fibo[];
 	
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
 		int arr[] = new int[T];
-		for(int i=0; i<T; i++)
-			arr[i] = Integer.parseInt(br.readLine());
+		int max = 0;
 		for(int i=0; i<T; i++) {
-			fibo = new int[arr[i] + 1];
-			fibo[0] = 0;
-			fibo[1] = 1;
-			fibonacci(arr[i]);
-			System.out.println(cnt0 + " " + cnt1);
-			System.out.println("fibo : " + fibonacci1(arr[i]));
-			cnt0 = 0;
-			cnt1 = 0;
+			arr[i] = Integer.parseInt(br.readLine());
+			if(arr[i] > max)
+				max = arr[i];
 		}
-	}
-	
-	static void fibonacci(int N) {
-		if(N == 0) {
-			cnt0++;
-			return;
+		
+		int[] cnt0 = new int[max+1];
+		int[] cnt1 = new int[max+1];
+		
+		for(int i=0; i<=max; i++) {
+			if(i == 0) {
+				cnt0[0] = 1;
+				cnt1[0] = 0;
+			}
+			else if(i == 1) {
+				cnt0[1] = 0;
+				cnt1[1] = 1;
+			}
+			else {
+				cnt0[i] = cnt0[i-1] + cnt0[i-2];
+				cnt1[i] = cnt1[i-1] + cnt1[i-2];
+			}
 		}
-		else if(N == 1) {
-			cnt1++;
-			return;
-		}
-		else {
-			fibonacci(N-1);
-			fibonacci(N-2);
-		}
-	}
-	
-	static int fibonacci1(int N) {
-		if(N==0)
-			return fibo[0];
-		if(fibo[N] == 0) {
-			fibo[N] = fibonacci1(N-1) + fibonacci1(N-2);  
-		}
-		return fibo[N];
+		
+		for(int i=0; i<T; i++) {
+			System.out.println(cnt0[arr[i]] + " " + cnt1[arr[i]]);
+		}	
 	}
 }
