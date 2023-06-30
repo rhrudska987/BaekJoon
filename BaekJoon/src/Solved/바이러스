@@ -1,0 +1,51 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = null;
+
+        int computerNum = Integer.parseInt(br.readLine());
+        int network = Integer.parseInt(br.readLine());
+
+        int dp[][] = new int[computerNum+1][computerNum+1];
+
+        for(int i=0; i<network; i++){
+            st = new StringTokenizer(br.readLine());
+            int n = Integer.parseInt(st.nextToken());
+            int m = Integer.parseInt(st.nextToken());
+            dp[n][m] = 1;
+            dp[m][n] = 1;
+        }
+
+        int virusCheck[] = new int[computerNum+1];
+        virusCheck[1] = 1;
+
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(1);
+
+        while(queue.size() > 0){
+            int virus = queue.poll();
+            for(int i=1; i<=computerNum; i++){
+                if(dp[virus][i] == 1 && virusCheck[i] == 0){
+                    queue.add(i);
+                    virusCheck[i] = 1;
+                }
+            }
+        }
+
+        int answer = 0;
+        for(int i=2; i<= computerNum; i++){
+            if(virusCheck[i] == 1)
+                answer++;
+        }
+
+        System.out.println(answer);
+    }
+}
