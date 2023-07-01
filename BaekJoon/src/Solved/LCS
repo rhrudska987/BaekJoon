@@ -1,0 +1,42 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class LCS {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String[] s1 = br.readLine().split("");
+        String[] s2 = br.readLine().split("");
+
+        int dp[][] = new int[s2.length][s1.length];
+        for(int i=0; i<s1.length; i++){
+            if(s2[0].equals(s1[i])) {
+                dp[0][i] = 1;
+                for(int j=i; j<s1.length; j++)
+                    dp[0][j] = 1;
+                break;
+            }
+        }
+        
+        for(int i=0; i<s2.length; i++){
+            if(s1[0].equals(s2[i])) {
+                dp[i][0] = 1;
+                for(int j=i; j<s2.length; j++)
+                    dp[j][0] = 1;
+                break;
+            }
+        }
+
+        for (int i=1; i<s1.length; i++){
+            for (int j=1; j<s2.length; j++){
+                if(s1[i].equals(s2[j]))
+                    dp[j][i] = dp[j-1][i-1]+1;
+                else
+                    dp[j][i] = Math.max(dp[j-1][i], dp[j][i-1]);
+            }
+        }
+        System.out.println(dp[s2.length-1][s1.length-1]);
+    }
+}
