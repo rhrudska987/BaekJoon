@@ -1,0 +1,70 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class 미로_탐색 {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        int maze[][] = new int[N][M];
+        int check[][] = new int[N][M];
+        for(int i=0; i<N; i++){
+            String[] str = br.readLine().split("");
+            for(int j=0; j<M; j++)
+                maze[i][j] = Integer.parseInt(str[j]);
+        }
+
+        Queue<Integer> queue_x = new LinkedList<>();
+        Queue<Integer> queue_y = new LinkedList<>();
+        Queue<Integer> cntPath = new LinkedList<>();
+        queue_x.add(0);
+        queue_y.add(0);
+        cntPath.add(1);
+        check[0][0] = 1; //0,0은 방문상태로 변경
+        
+        int minPath = 100000;
+        while(queue_x.size() > 0){
+            int x = queue_x.poll();
+            int y = queue_y.poll();
+            int tmpPath  = cntPath.poll();
+            if(x+1 == M-1 && y == N-1 || x == M-1 && y+1 == N-1){
+                if(tmpPath+1 < minPath)
+                    minPath = tmpPath+1;
+            }
+            if(x+1 < M && maze[y][x+1] == 1 && check[y][x+1] == 0){ //오른쪽 한칸
+                queue_x.add(x+1);
+                queue_y.add(y);
+                check[y][x+1] = 1;
+                cntPath.add(tmpPath+1);
+            }
+            if(x-1 >= 0 && maze[y][x-1] == 1 && check[y][x-1] == 0){ //왼쪽 한칸
+                queue_x.add(x-1);
+                queue_y.add(y);
+                check[y][x-1] = 1;
+                cntPath.add(tmpPath+1);
+            }
+            if(y+1 < N && maze[y+1][x] == 1 && check[y+1][x] == 0){ //아래쪽 한칸
+                queue_x.add(x);
+                queue_y.add(y+1);
+                check[y+1][x] = 1;
+                cntPath.add(tmpPath+1);
+            }
+            if(y-1 >= 0  && maze[y-1][x] == 1 && check[y-1][x] == 0){ //아래쪽 한칸
+                queue_x.add(x);
+                queue_y.add(y-1);
+                check[y-1][x] = 1;
+                cntPath.add(tmpPath+1);
+            }
+        }
+        System.out.println(minPath);
+    }
+}
