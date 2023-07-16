@@ -1,0 +1,49 @@
+package DynamicProgramming;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class 숨바꼭질 {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt();
+        int k = sc.nextInt();
+        int visited[];
+        if(k>n)
+            visited = new int[k*2];
+        else
+            visited = new int[n*2];
+
+        Queue<Integer> nodes = new LinkedList<>();
+        Queue<Integer> levels = new LinkedList<>();
+        nodes.add(n);
+        levels.add(0);
+        int answer = 0;
+        while(nodes.size() > 0) {
+            int node = nodes.poll();
+            int level = levels.poll();
+            System.out.println("node: " + node + " | level: " + level);
+            if (node == k) {
+                answer = level;
+                break;
+            }
+            if(node < 0)
+                continue;
+            if(visited[node] == 1)
+                continue;
+            visited[node] = 1;
+
+            if(node < k) {
+                nodes.add(node * 2);
+                nodes.add(node + 1);
+                levels.add(level+1);
+                levels.add(level+1);
+            }
+            nodes.add(node - 1);
+            levels.add(level+1);
+        }
+        System.out.println(answer);
+    }
+}
