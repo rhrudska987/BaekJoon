@@ -1,0 +1,65 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class 소트_게임 {
+    static int N, K;
+    static char[] arr, copy;
+    static String arr_str, copy_str;
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        
+        arr = br.readLine().replace(" ", "").toCharArray();
+        copy = Arrays.copyOf(arr, N);
+
+        Arrays.sort(arr);
+        arr_str = new String(arr);
+        copy_str = new String(copy);
+        System.out.println(bfs());
+    }
+
+    static int bfs(){
+        Queue<Node> nodes = new LinkedList<>();
+        Set<String> set = new HashSet<>();
+        nodes.add(new Node(copy_str, 0));
+        while(nodes.size() > 0){
+            Node node = nodes.poll();
+            String str = node.str;
+            int cnt = node.cnt;
+            if(arr_str.equals(str)) return cnt;
+            if(!set.contains(str)){
+                set.add(str);
+                for(int i=0; i<=N-K; i++){
+                    nodes.add(new Node(reverseString(str, i, i+K), cnt+1));
+                }
+            }
+        }
+        return -1;
+    }
+
+    static String reverseString(String str, int i, int j){
+        StringBuilder sb = new StringBuilder();
+        sb.append(str.substring(0, i));
+        String reverse = str.substring(i,j);
+        for(int k=K-1; k>=0; k--)
+            sb.append(reverse.charAt(k));
+        sb.append(str.substring(j, str.length()));
+        return sb.toString();
+    }
+
+    static class Node {
+        String str;
+        int cnt;
+        public Node(String str, int cnt){
+            this.str = str;
+            this.cnt = cnt;
+        }
+    }
+
+}
