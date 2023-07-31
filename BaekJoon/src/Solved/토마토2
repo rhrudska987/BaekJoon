@@ -1,0 +1,106 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class 토마토2 {
+
+    static int M, N, H;
+    static int[][] tomato_house;
+    static int[][] visited;
+    static Queue<int[]> queue = new LinkedList<>();
+    static Queue<Integer> levels = new LinkedList<>();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        M = Integer.parseInt(st.nextToken());
+        N = Integer.parseInt(st.nextToken());
+        H = Integer.parseInt(st.nextToken());
+        tomato_house = new int[N*H][M];
+        visited = new int[N*H][M];
+
+        for (int i=0; i<N*H; i++){
+            st = new StringTokenizer(br.readLine());
+            for (int j=0; j<M; j++) {
+                tomato_house[i][j] = Integer.parseInt(st.nextToken());
+                if (tomato_house[i][j] == 1) {
+                    queue.add(new int[]{i, j});
+                    levels.add(0);
+                    visited[i][j] = 1;
+                }
+            }
+        }
+        if(queue.size() == 0)
+            System.out.println(-1);
+        else
+            BFS();
+    }
+
+    static void BFS(){
+        while(queue.size() > 0){
+            int arr[] = queue.poll();
+            int y = arr[0];
+            int x = arr[1];
+            int level = levels.poll();
+            //위
+            if(y-1 >= (y/N)*N && visited[y-1][x] == 0 && tomato_house[y-1][x] == 0){
+                visited[y-1][x] = 1;
+                tomato_house[y-1][x] = 1;
+                queue.add(new int[]{y-1, x});
+                levels.add(level+1);
+            }
+            //아래
+            if(y+1 < ((y/N)+1)*N && visited[y+1][x] == 0 && tomato_house[y+1][x] == 0){
+                visited[y+1][x] = 1;
+                tomato_house[y+1][x] = 1;
+                queue.add(new int[]{y+1, x});
+                levels.add(level+1);
+            }
+            //왼쪽
+            if(x-1 >= 0 && visited[y][x-1] == 0 && tomato_house[y][x-1] == 0){
+                visited[y][x-1] = 1;
+                tomato_house[y][x-1] = 1;
+                queue.add(new int[]{y, x-1});
+                levels.add(level+1);
+            }
+            //오른쪽
+            if(x+1 < M && visited[y][x+1] == 0 && tomato_house[y][x+1] == 0){
+                visited[y][x+1] = 1;
+                tomato_house[y][x+1] = 1;
+                queue.add(new int[]{y, x+1});
+                levels.add(level+1);
+            }
+            //앞
+            if(y-N >= 0 && visited[y-N][x] == 0 && tomato_house[y-N][x] == 0){
+                visited[y-N][x] = 1;
+                tomato_house[y-N][x] = 1;
+                queue.add(new int[]{y-N, x});
+                levels.add(level+1);
+            }
+            //뒤
+            if(y+N < N*H && visited[y+N][x] == 0 && tomato_house[y+N][x] == 0){
+                visited[y+N][x] = 1;
+                tomato_house[y+N][x] = 1;
+                queue.add(new int[]{y+N, x});
+                levels.add(level+1);
+            }
+            if(queue.size() == 0) {
+                for (int i=0; i<N*H; i++){
+                    for (int j=0; j<M; j++){
+                        if(tomato_house[i][j] == 0){
+                            System.out.println(-1);
+                            return;
+                        }
+                    }
+                }
+                System.out.println(level);
+                return;
+            }
+        }
+    }
+}
