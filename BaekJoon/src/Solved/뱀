@@ -1,0 +1,134 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+public class 뱀 {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = null;
+
+        int N = Integer.parseInt(br.readLine());
+        int K = Integer.parseInt(br.readLine());
+
+        int[][] board = new int[N+1][N+1];
+        for (int i=0; i<K; i++){
+            st = new StringTokenizer(br.readLine());
+            int y = Integer.parseInt(st.nextToken());
+            int x = Integer.parseInt(st.nextToken());
+            board[y][x] = 1;
+        }
+
+        int L = Integer.parseInt(br.readLine());
+
+        Queue<int[]> direction = new LinkedList<>();
+        for (int i=0; i<L; i++){
+            st = new StringTokenizer(br.readLine());
+            int X = Integer.parseInt(st.nextToken());
+            String way = st.nextToken();
+            if(way.equals("L"))
+                direction.add(new int[]{X, 0});
+            else
+                direction.add(new int[]{X, 1});
+        }
+
+        int time = 0;
+        Deque<int[]> snake = new LinkedList<>();
+        snake.add(new int[]{1,1});
+        board[1][1] = 2;
+        int[] arr = direction.poll();
+        String way = "EAST";
+        int way_change = arr[0];
+        int next_way = arr[1];
+        while(true){
+            int size = set.size();
+            time++;
+            boolean wall_check = true;
+            int[] head = snake.peekFirst();
+            int y = head[0];
+            int x = head[1];
+            int[] tail = snake.peekLast();
+            if(way.equals("EAST") && x < N){
+                if(board[y][x+1] == 2 && snake.size() > 1)
+                    break;
+                snake.addFirst(new int[]{y, x+1});
+                if(board[y][x+1] == 0) {
+                    snake.removeLast();
+                    board[tail[0]][tail[1]] = 0;
+                }
+                board[y][x+1] = 2;
+                wall_check = false;
+            }
+            if(way.equals("WEST") && x > 1){
+                if(board[y][x-1] == 2 && snake.size() > 1)
+                    break;
+                snake.addFirst(new int[]{y, x-1});
+                if(board[y][x-1] == 0) {
+                    snake.removeLast();
+                    board[tail[0]][tail[1]] = 0;
+                }
+                board[y][x-1] = 2;
+                wall_check = false;
+            }
+            if(way.equals("SOUTH") && y < N){
+                if(board[y+1][x] == 2 && snake.size() > 1)
+                    break;
+                snake.addFirst(new int[]{y+1, x});
+                if(board[y+1][x] == 0) {
+                    snake.removeLast();
+                    board[tail[0]][tail[1]] = 0;
+                }
+                board[y+1][x] = 2;
+                wall_check = false;
+            }
+            if(way.equals("NORTH") && y > 1){
+                if(board[y-1][x] == 2 && snake.size() > 1)
+                    break;
+                snake.addFirst(new int[]{y-1, x});
+                if(board[y-1][x] == 0) {
+                    snake.removeLast();
+                    board[tail[0]][tail[1]] = 0;
+                }
+                board[y-1][x] = 2;
+                wall_check = false;
+            }
+            if (wall_check) //벽에 부딪힘
+                break;
+            if(way_change == time){ //다음 방향 설정
+                if(way.equals("EAST")){
+                    if(next_way == 0)
+                        way = "NORTH";
+                    else
+                        way = "SOUTH";
+                }
+                else if(way.equals("WEST")){
+                    if(next_way == 0)
+                        way = "SOUTH";
+                    else
+                        way = "NORTH";
+                }
+                else if(way.equals("NORTH")){
+                    if(next_way == 0)
+                        way = "WEST";
+                    else
+                        way = "EAST";
+                }
+                else if(way.equals("SOUTH")){
+                    if(next_way == 0)
+                        way = "EAST";
+                    else
+                        way = "WEST";
+                }
+                if(direction.size() > 0) {
+                    arr = direction.poll();
+                    way_change = arr[0];
+                    next_way = arr[1];
+                }
+            }
+        }
+        System.out.println(time);
+    }
+}
