@@ -1,0 +1,48 @@
+package DynamicProgramming;
+
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class 신기한_소수 {
+
+    static int N;
+    static int num = 0;
+    static ArrayList<Integer> list = new ArrayList<>();
+    static int[] arr = new int[]{1, 2, 3, 5, 7, 9};
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        N = sc.nextInt();
+
+        backTracking(0);
+
+        for (int i=0; i<list.size(); i++)
+            System.out.println(list.get(i));
+    }
+
+    static void backTracking(int idx){
+        if(!primeCheck())
+            return;
+        if(idx == N) {
+            list.add(num);
+            return;
+        }
+        for (int i=0; i<arr.length; i++){
+            if(idx == 0 && arr[i] == 1)
+                continue;
+            num *= 10;
+            num += arr[i];
+            backTracking(idx+1);
+            num -= arr[i];
+            num /= 10;
+        }
+    }
+
+    static boolean primeCheck(){
+        for (int i=2; i<=Math.sqrt(num); i++){
+            if(num % i == 0)
+                return false;
+        }
+        return true;
+    }
+}
