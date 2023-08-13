@@ -1,0 +1,50 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.StringTokenizer;
+
+public class 배 {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        Integer[] crane = new Integer[N];
+        for (int i=0; i<N; i++)
+            crane[i] = Integer.parseInt(st.nextToken());
+        Arrays.sort(crane, Collections.reverseOrder());
+
+        int M = Integer.parseInt(br.readLine());
+        st = new StringTokenizer(br.readLine());
+        ArrayList<Integer> box = new ArrayList<>();
+        for (int i=0; i<M; i++)
+            box.add(Integer.parseInt(st.nextToken()));
+        Collections.sort(box, Collections.reverseOrder());
+
+        int answer = 0;
+        if(box.get(0) > crane[0]){
+            System.out.println(-1);
+            return;
+        }
+        while(box.size() > 0) {
+            int cnt = 0;
+            for (int i=0; i<box.size();){
+                if(box.get(i) <= crane[cnt]){
+                    box.remove(i);
+                    cnt++;
+                }
+                else
+                    i++;
+                if(cnt == N)
+                    break;
+            }
+            answer++;
+        }
+        System.out.println(answer);
+    }
+}
