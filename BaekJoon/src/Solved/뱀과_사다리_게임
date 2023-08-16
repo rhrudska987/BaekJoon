@@ -1,0 +1,67 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class 뱀과_사다리_게임 {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        HashMap<Integer, Integer> ladderAndSnake = new HashMap<>();
+
+        for (int i=0; i<N; i++){
+            st = new StringTokenizer(br.readLine());
+            ladderAndSnake.put(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+        }
+
+        for (int i=0; i<M; i++){
+            st = new StringTokenizer(br.readLine());
+            ladderAndSnake.put(Integer.parseInt(st.nextToken()), Integer.parseInt(st.nextToken()));
+        }
+
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(1);
+        int count[] = new int[101];
+        int visited[] = new int[101];
+        count[1] = 0;
+        visited[1] = 1;
+
+        while(queue.size() > 0) {
+            int n = queue.poll();
+            if (n == 100)
+                break;
+
+            for (int i=1; i<=6; i++) {
+                int x = n + i;
+                if(x > 100)
+                    continue;
+                if (visited[x] == 1)
+                    continue;
+                visited[x] = 1;
+
+                if(ladderAndSnake.containsKey(x)) {
+                    if(visited[ladderAndSnake.get(x)] == 0) {
+                        queue.add(ladderAndSnake.get(x));
+                        visited[ladderAndSnake.get(x)] = 1;
+                        count[ladderAndSnake.get(x)] = count[n] + 1;
+                    }
+                }
+                else {
+                    queue.add(x);
+                    count[x] = count[n] + 1;
+                }
+            }
+        }
+        System.out.println(count[100]);
+    }
+}
