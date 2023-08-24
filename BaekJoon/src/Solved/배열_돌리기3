@@ -1,0 +1,121 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class 배열_돌리기3 {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        int R = Integer.parseInt(st.nextToken());
+
+        int arr[][] = new int[N][M];
+        for (int i=0; i<N; i++){
+            st = new StringTokenizer(br.readLine());
+            for (int j=0; j<M; j++)
+                arr[i][j] = Integer.parseInt(st.nextToken());
+        }
+        st = new StringTokenizer(br.readLine());
+        int rotate[] = new int[R];
+        for (int i=0; i<R; i++)
+            rotate[i] = Integer.parseInt(st.nextToken());
+
+        for (int i=0; i<R; i++){
+            if(rotate[i] == 1) {
+                for (int j=0; j<M; j++){
+                    for (int k=0; k<N/2; k++){
+                        int tmp = arr[k][j];
+                        arr[k][j] = arr[N-1-k][j];
+                        arr[N-1-k][j] = tmp;
+                    }
+                }
+            }
+            else if(rotate[i] == 2) {
+                for (int j=0; j<N; j++){
+                    for (int k=0; k<M/2; k++){
+                        int tmp = arr[j][k];
+                        arr[j][k] = arr[j][M-1-k];
+                        arr[j][M-1-k] = tmp;
+                    }
+                }
+            }
+            else if (rotate[i] == 3) {
+                int rotateArr[][] = new int[M][N];
+                for(int j=0; j<N; j++){
+                    for(int k=0; k<M; k++){
+                        rotateArr[k][N-j-1] =  arr[j][k];
+                    }
+                }
+                int tmp = N;
+                N = M;
+                M = tmp;
+                arr = rotateArr;
+            }
+            else if(rotate[i] == 4){
+                int rotateArr[][] = new int[M][N];
+                for(int j=0; j<N; j++){
+                    for(int k=0; k<M; k++){
+                        rotateArr[M-k-1][j] =  arr[j][k];
+                    }
+                }
+                int tmp = N;
+                N = M;
+                M = tmp;
+                arr = rotateArr;
+            }
+            else if (rotate[i] == 5){
+                int arr2[][] = new int[N][M];
+                for (int j=0; j<N/2; j++){ //1->2
+                    for (int k=0; k<M/2; k++)
+                        arr2[j][M/2+k] = arr[j][k];
+                }
+                for (int j=0; j<N/2; j++){ //2->3
+                    for (int k=M/2; k<M; k++)
+                        arr2[N/2+j][k] = arr[j][k];
+                }
+                for (int j=N/2; j<N; j++) { //3->4
+                    for (int k=M/2; k<M; k++)
+                        arr2[j][k-M/2] = arr[j][k];
+                }
+                for (int j=N/2; j<N; j++) { //4->1
+                    for (int k=0; k<M/2; k++)
+                        arr2[j-N/2][k] = arr[j][k];
+                }
+                arr = arr2;
+            }
+            else {
+                int arr2[][] = new int[N][M];
+                for (int j=0; j<N/2; j++){ //1->4
+                    for (int k=0; k<M/2; k++)
+                        arr2[N/2+j][k] = arr[j][k];
+                }
+                for (int j=N/2; j<N; j++){ //4->3
+                    for (int k=0; k<M/2; k++)
+                        arr2[j][k+M/2] = arr[j][k];
+                }
+                for (int j=N/2; j<N; j++) { //3->2
+                    for (int k=M/2; k<M; k++)
+                        arr2[j-N/2][k] = arr[j][k];
+                }
+                for (int j=0; j<N/2; j++) { //2->1
+                    for (int k=M/2; k<M; k++)
+                        arr2[j][k-M/2] = arr[j][k];
+                }
+                arr = arr2;
+            }
+        }
+
+        for (int i=0; i<N; i++){
+            for (int j=0; j<M; j++){
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+    }
+
+}
