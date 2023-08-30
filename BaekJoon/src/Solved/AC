@@ -1,0 +1,83 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Deque;
+import java.util.LinkedList;
+
+public class AC {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br= new BufferedReader(new InputStreamReader(System.in));
+        StringBuilder sb = new StringBuilder();
+
+        int N = Integer.parseInt(br.readLine());
+        for (int i=0; i<N; i++){
+            String[] p = br.readLine().split("");
+            int n = Integer.parseInt(br.readLine());
+            String str = br.readLine();
+            if (str.equals("[]")){
+                boolean check = true;
+                for (int j=0; j<p.length; j++){
+                    if (p[j].equals("D")) {
+                        sb.append("error\n");
+                        check = false;
+                        break;
+                    }
+                }
+                if(check)
+                    sb.append("[]\n");
+                continue;
+            }
+            str = str.replace("[", "").replace("]","");
+            String[] x = str.split(",");
+            Deque<String> queueX = new LinkedList<>();
+
+            for (int j=0; j<x.length; j++)
+                queueX.add(x[j]);
+            boolean reverse = false;
+
+            boolean isError = false;
+            for (int j=0; j<p.length; j++){
+                if(p[j].equals("R")){
+                    if(reverse)
+                        reverse = false;
+                    else
+                        reverse = true;
+                }
+                else if(p[j].equals("D")){
+                    if(queueX.size() > 0){
+                        if (reverse)
+                            queueX.removeLast();
+                        else
+                            queueX.removeFirst();
+                    }
+                    else{
+                        sb.append("error\n");
+                        isError = true;
+                        break;
+                    }
+                }
+            }
+
+            if(!isError) {
+                sb.append("[");
+                int size = queueX.size();
+                if(reverse) {
+                    for (int j = 0; j < size; j++)
+                        sb.append(queueX.pollLast() + ",");
+                }
+                else{
+                    for (int j = 0; j < size; j++)
+                        sb.append(queueX.pollFirst() + ",");
+                }
+                if (size > 0)
+                    sb.deleteCharAt(sb.length() - 1);
+                sb.append("]\n");
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        System.out.println(sb.toString());
+    }
+}
