@@ -1,0 +1,108 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class 톱니바퀴 {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        String wheel[] = new String[5];
+        for (int i=1; i<5; i++)
+            wheel[i] = br.readLine();
+        int k = Integer.parseInt(br.readLine());
+        int[][] k_arr = new int[k][2];
+
+        StringTokenizer st = null;
+        for (int i=0; i<k; i++){
+            st = new StringTokenizer(br.readLine());
+            k_arr[i][0] = Integer.parseInt(st.nextToken());
+            k_arr[i][1] = Integer.parseInt(st.nextToken());
+        }
+
+        char[] right = new char[5];
+        char[] left = new char[5];
+        for (int i=0; i<k; i++){
+            int wheelNum = k_arr[i][0];
+            int rotate = k_arr[i][1];
+            right[1] = wheel[1].charAt(2);
+            right[2] = wheel[2].charAt(2);
+            right[3] = wheel[3].charAt(2);
+            right[4] = wheel[4].charAt(2);
+            left[1] = wheel[1].charAt(6);
+            left[2] = wheel[2].charAt(6);
+            left[3] = wheel[3].charAt(6);
+            left[4] = wheel[4].charAt(6);
+            if (rotate == 1)
+                wheel[wheelNum] = rotateRight(wheel[wheelNum]);
+            else
+                wheel[wheelNum] = rotateLeft(wheel[wheelNum]);
+
+            int copyWheelNum = wheelNum;
+            int copyRotate = rotate;
+
+            while(copyWheelNum > 1){
+                if(left[copyWheelNum] != right[copyWheelNum-1]){
+                    if(copyRotate == 1){
+                        wheel[copyWheelNum-1] = rotateLeft(wheel[copyWheelNum-1]);
+                        copyRotate = -1;
+                    }
+                    else{
+                        wheel[copyWheelNum-1] = rotateRight(wheel[copyWheelNum-1]);
+                        copyRotate = 1;
+                    }
+                    copyWheelNum--;
+                }
+                else
+                    break;
+            }
+            while(wheelNum < 4){
+                if(right[wheelNum] != left[wheelNum+1]){
+                    if(rotate == 1){
+                        wheel[wheelNum+1] = rotateLeft(wheel[wheelNum+1]);
+                        rotate = -1;
+                    }
+                    else{
+                        wheel[wheelNum+1] = rotateRight(wheel[wheelNum+1]);
+                        rotate = 1;
+                    }
+                    wheelNum++;
+                }
+                else
+                    break;
+            }
+        }
+        
+        int answer = 0;
+        if (wheel[1].charAt(0) == '1')
+            answer+=1;
+        if (wheel[2].charAt(0) == '1')
+            answer+=2;
+        if (wheel[3].charAt(0) == '1')
+            answer+=4;
+        if (wheel[4].charAt(0) == '1')
+            answer+=8;
+
+        System.out.println(answer);
+    }
+
+    static String rotateLeft(String wheel){
+        StringBuilder sb = new StringBuilder(wheel);
+        char c = sb.charAt(0);
+        sb.deleteCharAt(0);
+        sb.append(c);
+        return sb.toString();
+    }
+
+    static String rotateRight(String wheel){
+        StringBuilder sb = new StringBuilder(wheel);
+        char c = sb.charAt(wheel.length()-1);
+        sb.deleteCharAt(wheel.length()-1);
+        sb.insert(0, c);
+        return sb.toString();
+    }
+
+}
