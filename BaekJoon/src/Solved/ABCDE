@@ -1,0 +1,53 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class ABCDE {
+
+    static ArrayList<Integer>[] friendship;
+    static int visited[];
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        friendship = new ArrayList[N];
+        for(int i=0; i<N; i++)
+            friendship[i] = new ArrayList<>();
+        visited = new int[N];
+
+        for (int i=0; i<M; i++){
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            friendship[a].add(b);
+            friendship[b].add(a);
+        }
+
+        for (int i=0; i<N; i++){
+            visited[i] = 1;
+            bruteForce(0, i);
+            visited[i] = 0;
+        }
+        System.out.println(0);
+    }
+
+    static void bruteForce(int num, int idx) {
+        if(num == 4){
+            System.out.println(1);
+            System.exit(0);
+        }
+        for (int i=0; i<friendship[idx].size(); i++) {
+            if (visited[friendship[idx].get(i)] == 0){
+                visited[friendship[idx].get(i)] = 1;
+                bruteForce(num+1, friendship[idx].get(i));
+                visited[friendship[idx].get(i)] = 0;
+            }
+        }
+    }
+}
