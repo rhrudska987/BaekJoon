@@ -1,0 +1,46 @@
+package DynamicProgramming;
+
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class 숨바꼭질3 {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int N = sc.nextInt();
+        int K = sc.nextInt();
+
+        boolean[] visited = new boolean[100001];
+        Deque<Node> dq = new LinkedList<>();
+        dq.add(new Node(N, 0));
+
+        while(dq.size() > 0){
+            Node node = dq.poll();
+            int l = node.l;
+            int time = node.time;
+            visited[l] = true;
+
+            if(l == K){
+                System.out.println(time);
+                break;
+            }
+
+            if(2*l <= 100000 && !visited[2*l])
+                dq.addFirst(new Node(2*l, time));
+            if(l < K && l+1 <= 100000 && !visited[l+1])
+                dq.addLast(new Node(l+1, time+1));
+            if(l - 1 >= 0 && !visited[l-1])
+                dq.addLast(new Node(l-1, time+1));
+        }
+    }
+
+    static class Node {
+        int l, time;
+
+        public Node(int l, int time){
+            this.l = l;
+            this.time = time;
+        }
+    }
+}
