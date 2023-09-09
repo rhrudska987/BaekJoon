@@ -1,0 +1,107 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.StringTokenizer;
+
+public class 마법사_상어와_비바라기 {
+
+    static int dx[] = {0, -1, -1, 0, 1, 1, 1, 0, -1};
+    static int dy[] = {0, 0, -1, -1, -1, 0, 1, 1, 1};
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        int map[][] = new int[N+1][N+1];
+        for (int i=1; i<=N; i++){
+            st = new StringTokenizer(br.readLine());
+            for (int j=1; j<=N; j++){
+                map[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        ArrayList<Node> list = new ArrayList<>();
+        list.add(new Node(1, N));
+        list.add(new Node(2, N));
+        list.add(new Node(1, N - 1));
+        list.add(new Node(2, N - 1));
+
+        for (int i=0; i<M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int d = Integer.parseInt(st.nextToken());
+            int s = Integer.parseInt(st.nextToken());
+
+            for (int j = 0; j < list.size(); j++) { //d방향으로 s칸 이동
+                int y = list.get(0).y;
+                int x = list.get(0).x;
+                list.remove(0);
+                for (int k = 0; k < s; k++) {
+                    if (y + dy[d] == 0) y = N;
+                    else if (y + dy[d] == N + 1) y = 1;
+                    else y += dy[d];
+
+                    if (x + dx[d] == 0) x = N;
+                    else if (x + dx[d] == N + 1) x = 1;
+                    else x += dx[d];
+                }
+                list.add(new Node(x, y));
+            }
+
+            for (int j = 0; j < list.size(); j++) { //바구니 물 1 증가
+                int y = list.get(j).y;
+                int x = list.get(j).x;
+                map[y][x]++;
+            }
+
+            for (int j = 0; j < list.size(); j++) { //대각선 방향 거리가 1인 칸에 물이 있다면 물의 양 증가
+                int y = list.get(j).y;
+                int x = list.get(j).x;
+                if (y - 1 > 0 && x - 1 > 0 && map[y - 1][x - 1] > 0)
+                    map[y][x]++;
+                if (y - 1 > 0 && x + 1 <= N && map[y - 1][x + 1] > 0)
+                    map[y][x]++;
+                if (y + 1 <= N && x - 1 > 0 && map[y + 1][x - 1] > 0)
+                    map[y][x]++;
+                if (y + 1 <= N && x + 1 <= N && map[y + 1][x + 1] > 0)
+                    map[y][x]++;
+            }
+
+            boolean visited[][] = new boolean[N+1][N+1];
+            while (list.size() > 0) {
+                visited[list.get(0).y][list.get(0).x] = true;
+                list.remove(0);
+            }
+
+            for (int j = 1; j <= N; j++) {
+                for (int k = 1; k <= N; k++) {
+                    if(!visited[j][k] && map[j][k] >= 2) {
+                        map[j][k] -= 2;
+                        list.add(new Node(k,j));
+                    }
+                }
+            }
+        }
+
+        int answer = 0;
+        for (int i=1; i<=N; i++){
+            for (int j=1; j<=N; j++)
+                answer += map[i][j];
+        }
+        System.out.println(answer);
+    }
+
+    static class Node {
+        int x, y;
+
+        public Node(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+}
