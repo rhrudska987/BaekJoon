@@ -1,0 +1,59 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.StringTokenizer;
+
+public class 도서관 {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+
+        int[] books = new int[N];
+        for (int i=0; i<N; i++)
+            books[i] = Integer.parseInt(st.nextToken());
+        Arrays.sort(books);
+
+        Deque<Integer> positive = new LinkedList<>();
+        Deque<Integer> negative = new LinkedList<>();
+
+        for (int i=0; i<N; i++){
+            if(books[i] < 0)
+                negative.add(Math.abs(books[i]));
+            else
+                positive.add(books[i]);
+        }
+        int max = Math.max(Math.abs(books[0]), Math.abs(books[N-1]));
+
+        int answer = 0;
+        while(negative.size() > 0){
+            answer += negative.peek() * 2;
+            for (int i=0; i<M; i++) {
+                if(negative.isEmpty())
+                    break;
+                negative.poll();
+            }
+        }
+
+        while(positive.size() > 0){
+            answer += positive.peekLast() * 2;
+            for (int i=0; i<M; i++) {
+                if(positive.isEmpty())
+                    break;
+                positive.pollLast();
+            }
+        }
+
+        answer -= max;
+        System.out.println(answer);
+    }
+
+}
