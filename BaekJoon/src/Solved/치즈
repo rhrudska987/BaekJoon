@@ -1,0 +1,76 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class 치즈 {
+    static int dx[] = {-1, 0, 1, 0};
+    static int dy[] = {0, -1, 0, 1};
+    static int column, row;
+    static int map[][];
+    static boolean visited[][];
+    static Queue<Node> queue = new LinkedList<>();
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        column = Integer.parseInt(st.nextToken());
+        row = Integer.parseInt(st.nextToken());
+
+        map = new int[column][row];
+        visited = new boolean[column][row];
+        for (int i=0; i<column; i++){
+            st = new StringTokenizer(br.readLine());
+            for (int j=0; j<row; j++){
+                map[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+        int time = 0;
+        dfs(0, 0);
+        int cnt = 0;
+        while(!queue.isEmpty()){
+            time++;
+            cnt = queue.size();
+            while(queue.size() > 0){
+                Node n = queue.poll();
+                map[n.y][n.x] = 0;
+            }
+            visited = new boolean[column][row];
+            dfs(0, 0);
+        }
+
+        System.out.println(time);
+        System.out.println(cnt);
+    }
+
+    static void dfs(int x, int y) {
+        if(map[y][x] == 1){
+            queue.add(new Node(x, y));
+            visited[y][x] = true;
+            return;
+        }
+
+        visited[y][x] = true;
+        for (int i=0; i<4; i++){
+            if(x + dx[i] >= 0 && x + dx[i] < row && !visited[y][x+dx[i]])
+                dfs(x + dx[i], y);
+            if(y + dy[i] >= 0 && y + dy[i] < column && !visited[y+dy[i]][x])
+                dfs(x, y + dy[i]);
+        }
+
+    }
+    
+    static class Node {
+        int x, y;
+
+        public Node(int x, int y){
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+}
