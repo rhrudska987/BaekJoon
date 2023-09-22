@@ -1,0 +1,61 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class 로봇_청소기 {
+
+    static int[] dx = {0, 1, 0, -1};
+    static int[] dy = {-1, 0, 1, 0};
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+        st = new StringTokenizer(br.readLine());
+        int r = Integer.parseInt(st.nextToken());
+        int c = Integer.parseInt(st.nextToken());
+        int d = Integer.parseInt(st.nextToken());
+        int map[][] = new int[N][M];
+        boolean visited[][] = new boolean[N][M];
+        for (int i=0; i<N; i++){
+            st = new StringTokenizer(br.readLine());
+            for (int j=0; j<M; j++){
+                map[i][j] = Integer.parseInt(st.nextToken());
+                if(map[i][j] == 1)
+                    visited[i][j] = true;
+            }
+        }
+
+        int answer = 0;
+        while(true){
+            if(!visited[r][c]) {
+                visited[r][c] = true;
+                answer++;
+            }
+            if(visited[r-1][c] && visited[r+1][c] && visited[r][c-1] && visited[r][c+1]){
+                if(map[r-dy[d]][c-dx[d]] == 1)
+                    break;
+                else{
+                    r -= dy[d];
+                    c -= dx[d];
+                }
+            }
+            else {
+                if(d == 0)
+                    d = 3;
+                else
+                    d -= 1;
+                if(!visited[r+dy[d]][c+dx[d]] && map[r+dy[d]][c+dx[d]] == 0) {
+                    r += dy[d];
+                    c += dx[d];
+                }
+            }
+        }
+
+        System.out.println(answer);
+    }
+}
