@@ -1,0 +1,31 @@
+package DynamicProgramming;
+
+import java.util.Scanner;
+
+public class 곱셈 {
+
+    static int A, B, C;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        A = sc.nextInt();
+        B = sc.nextInt();
+        C = sc.nextInt();
+
+        System.out.println(calc(B) % C);
+    }
+
+    static long calc(int num) {
+        if(num == 1)
+            return A;
+        long calcNum = calc(num/2);
+        if(num % 2 == 1)
+            return ((calcNum * calcNum)%C * A)%C;
+        else 
+            return (calcNum * calcNum)%C;
+    }
+//calcNum * calcNum * A를 하면 overflow 발생
+//모듈러 산수 연산은 분배법칙이 성립
+//ex) (A + B) mod C = (A mod C + B mod C) mod C
+//    (A * B) mod C = (A mod C * B mod C) mod C
+}
