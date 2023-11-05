@@ -1,0 +1,77 @@
+package DynamicProgramming;
+
+import java.util.LinkedList;
+import java.util.Scanner;
+
+public class 스택2 {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder();
+
+        int N = sc.nextInt();
+        Stack stack = new Stack();
+
+        for (int i = 0; i < N; i++) {
+            int command = sc.nextInt();
+            switch (command) {
+                case 1:
+                    int x = sc.nextInt();
+                    stack.add(x);
+                    break;
+                case 2:
+                    sb.append(stack.pop() + "\n");
+                    break;
+                case 3:
+                    sb.append(stack.size() + "\n");
+                    break;
+                case 4:
+                    sb.append(stack.empty() + "\n");
+                    break;
+                case 5:
+                    sb.append(stack.peek() + "\n");
+                    break;
+            }
+        }
+        sb.deleteCharAt(sb.length() - 1);
+        System.out.println(sb.toString());
+    }
+
+
+    static class Stack {
+        private LinkedList<Integer> list = new LinkedList<>();
+
+        public void add(int x) {
+            list.add(x);
+        }
+
+        public int pop() {
+            if (list.size() > 0) {
+                int num = list.get(list.size() - 1);
+                list.removeLast();
+                return num;
+            }
+            return -1;
+        }
+
+        public int size() {
+            return list.size();
+        }
+
+        public int empty() {
+            if (list.size() == 0) {
+                return 1;
+            }
+            return 0;
+        }
+
+        public int peek() {
+            if (list.size() == 0) {
+                return -1;
+            }
+            return list.get(list.size() - 1);
+        }
+
+    }
+
+}
