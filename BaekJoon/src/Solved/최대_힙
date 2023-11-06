@@ -1,0 +1,47 @@
+package DynamicProgramming;
+
+import java.util.Collections;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+public class 최대_힙 {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder();
+        MaxHeap maxHeap = new MaxHeap();
+
+        int N = sc.nextInt();
+        for (int i = 0; i < N; i++) {
+            int command = sc.nextInt();
+            if (command == 0) {
+                sb.append(maxHeap.poll() + "\n");
+            } else {
+                maxHeap.add(command);
+                ;
+            }
+        }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        System.out.println(sb);
+    }
+
+    static class MaxHeap {
+
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(Collections.reverseOrder());
+
+        public int poll() {
+            if(priorityQueue.size() == 0) {
+                return 0;
+            }
+            return priorityQueue.poll();
+        }
+
+        public void add(int x) {
+            priorityQueue.add(x);
+        }
+
+    }
+
+}
