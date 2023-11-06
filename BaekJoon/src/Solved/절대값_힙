@@ -1,0 +1,56 @@
+package DynamicProgramming;
+
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+public class 절대값_힙 {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        StringBuilder sb = new StringBuilder();
+        AbsHeap absHeap = new AbsHeap();
+
+        int N = sc.nextInt();
+        for (int i = 0; i < N; i++) {
+            int command = sc.nextInt();
+            if (command == 0) {
+                sb.append(absHeap.poll() + "\n");
+            } else {
+                absHeap.add(command);
+            }
+        }
+        if (sb.length() > 0) {
+            sb.deleteCharAt(sb.length() - 1);
+        }
+        System.out.println(sb);
+    }
+
+    static class AbsHeap {
+        PriorityQueue<Integer> priorityQueue = new PriorityQueue<>(1, new Comp());
+
+        public int poll() {
+            if(priorityQueue.size() == 0) {
+                return 0;
+            }
+            return priorityQueue.poll();
+        }
+
+        public void add(int x) {
+            priorityQueue.add(x);
+        }
+
+        class Comp implements Comparator<Integer> {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                if(Math.abs(o1) == Math.abs(o2)) {
+                    return o1 - o2;
+                } else {
+                    return Math.abs(o1) - Math.abs(o2);
+                }
+            }
+        }
+
+    }
+
+}
