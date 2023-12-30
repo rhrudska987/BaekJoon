@@ -1,0 +1,51 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class 비슷한_단어 {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+
+        String firstWord = br.readLine();
+        int[] first = new int[26];
+
+        for (int i = 0; i < firstWord.length(); i++) {
+            first[firstWord.charAt(i) - 'A']++;
+        }
+
+        int answer = 0;
+
+        for (int i = 1; i < N; i++) {
+            String currentStr = br.readLine();
+            int[] check = first.clone();
+            int cnt = 0;
+
+            if (Math.abs(currentStr.length() - firstWord.length()) > 1) {
+                continue;
+            }
+
+            for (int j = 0; j < currentStr.length(); j++) {
+                if (check[currentStr.charAt(j) - 'A'] > 0) {
+                    check[currentStr.charAt(j) - 'A']--;
+                    cnt++;
+                }
+            }
+
+            if (firstWord.length() == currentStr.length() && (cnt == firstWord.length()
+                    || firstWord.length() - 1 == cnt)) {
+                answer++;
+            } else if (firstWord.length() == currentStr.length() - 1 && currentStr.length() - 1 == cnt) {
+                answer++;
+            } else if (firstWord.length() == currentStr.length() + 1 && currentStr.length() == cnt) {
+                answer++;
+            }
+        }
+
+        System.out.println(answer);
+    }
+
+}
