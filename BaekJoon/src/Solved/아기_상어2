@@ -1,0 +1,68 @@
+package DynamicProgramming;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class 아기_상어2 {
+
+    static int N, M;
+    static int map[][];
+    static int dist[][];
+    static int[] dx = {-1, -1, 0, 1, 1, 1, 0, -1};
+    static int[] dy = {0, -1, -1, -1, 0, 1, 1, 1};
+    static int max = Integer.MIN_VALUE;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        N = sc.nextInt();
+        M = sc.nextInt();
+        map = new int[N][M];
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                map[i][j] = sc.nextInt();
+            }
+        }
+        
+        int result;
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < M; j++) {
+                if (map[i][j] == 0) {
+                    result = bfs(i, j);
+                    if (result > max) {
+                        max = result;
+                    }
+                }
+            }
+        }
+
+        System.out.println(max);
+    }
+
+    static int bfs(int a, int b) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{a, b, 0});
+        dist = new int[N][M];
+        dist[a][b] = -1;
+        while (!queue.isEmpty()) {
+            int[] arr = queue.poll();
+            for (int i = 0; i < 8; i++) {
+                int ny = arr[0] + dy[i];
+                int nx = arr[1] + dx[i];
+                int nDistance = arr[2] + 1;
+                if (ny >= 0 && ny < N && nx >= 0 && nx < M && dist[ny][nx] == 0) {
+                    if (map[ny][nx] == 1) {
+                        return nDistance;
+                    }
+                    dist[ny][nx] = nDistance;
+                    queue.add(new int[]{ny, nx, nDistance});
+                }
+            }
+        }
+        return 0;
+    }
+
+}
