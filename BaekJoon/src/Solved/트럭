@@ -1,0 +1,62 @@
+package DynamicProgramming;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class 트럭 {
+
+    static List<Integer> timeList = new ArrayList<>();
+    static Queue<Integer> bridge = new LinkedList<>();
+    static int n, w, L;
+    static int weightSum;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        n = sc.nextInt();
+        w = sc.nextInt();
+        L = sc.nextInt();
+
+        int trucks[] = new int[n];
+
+        for (int i = 0; i < n; i++) {
+            trucks[i] = sc.nextInt();
+        }
+
+        weightSum = 0;
+        int time = 0;
+        for (int i = 0; i < n; i++) {
+            time++;
+            updateTimeList();
+            if (bridge.size() >= w || weightSum + trucks[i] > L) {
+                i--;
+                continue;
+            }
+            weightSum += trucks[i];
+            bridge.add(trucks[i]);
+            timeList.add(1);
+        }
+
+        while (!bridge.isEmpty()) {
+            time++;
+            updateTimeList();
+        }
+
+        System.out.println(time);
+    }
+
+    static void updateTimeList() {
+        for (int i = 0; i < timeList.size(); i++) {
+            timeList.set(i, timeList.get(i) + 1);
+        }
+
+        if (!timeList.isEmpty() && timeList.get(0) > w) {
+            timeList.remove(0);
+            int truckWeight = bridge.poll();
+            weightSum -= truckWeight;
+        }
+    }
+
+}
