@@ -1,0 +1,66 @@
+package DynamicProgramming;
+
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Scanner;
+
+public class A와B2 {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        String S = sc.nextLine();
+        String T = sc.nextLine();
+
+        if (S.length() == T.length()) {
+            if (S.equals(T)) {
+                System.out.println("1");
+            } else {
+                System.out.println("0");
+            }
+            return;
+        }
+
+        Queue<String> queue = new LinkedList<>();
+        if (T.charAt(0) == 'B') {
+            String str = "";
+            for (int i=T.length() - 1; i>0; i--) {
+                str += String.valueOf(T.charAt(i));
+            }
+            queue.add(str);
+        }
+        if (T.charAt(T.length()-1) == 'A') {
+            String str = "";
+            for (int i=0; i<T.length() - 1; i++) {
+                str += String.valueOf(T.charAt(i));
+            }
+            queue.add(str);
+        }
+
+        while(!queue.isEmpty()) {
+            String tmp = queue.poll();
+            if (tmp.length() == S.length()) {
+                if(tmp.equals(S)) {
+                    System.out.println("1");
+                    return;
+                }
+            } else {
+                if (tmp.charAt(0) == 'B') {
+                    String str = "";
+                    for (int i=tmp.length() - 1; i>0; i--) {
+                        str += String.valueOf(tmp.charAt(i));
+                    }
+                    queue.add(str);
+                }
+                if (tmp.charAt(tmp.length()-1) == 'A') {
+                    String str = "";
+                    for (int i=0; i<tmp.length() - 1; i++) {
+                        str += String.valueOf(tmp.charAt(i));
+                    }
+                    queue.add(str);
+                }
+            }
+        }
+
+        System.out.println("0");
+    }
+}
