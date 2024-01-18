@@ -1,0 +1,77 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class 택배_배송 {
+
+    static ArrayList<Node>[] list;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int M = Integer.parseInt(st.nextToken());
+
+        list = new ArrayList[N+1];
+        for (int i=0; i<N+1; i++) {
+            list[i] = new ArrayList<>();
+        }
+
+        for (int i=0; i<M; i++) {
+            st = new StringTokenizer(br.readLine());
+            int a = Integer.parseInt(st.nextToken());
+            int b = Integer.parseInt(st.nextToken());
+            int c = Integer.parseInt(st.nextToken());
+            Node node1 = new Node(b, c);
+            Node node2 = new Node(a, c);
+            list[a].add(node1);
+            list[b].add(node2);
+        }
+
+        int distance[] = new int[N + 1];
+        for (int i=1; i<=N; i++) {
+            distance[i] = Integer.MAX_VALUE;
+        }
+
+        PriorityQueue<Node> queue = new PriorityQueue<>();
+        queue.offer(new Node(1, 0));
+        distance[1] = 0;
+        while (!queue.isEmpty()) {
+            Node nowNode = queue.poll();
+            int idx = nowNode.to;
+            if (distance[idx] < nowNode.weight) continue;
+            for (int j=0; j<list[idx].size(); j++) {
+                Node node = list[idx].get(j);
+                if (distance[node.to] > distance[idx] + node.weight) {
+                    distance[node.to] = distance[idx] + node.weight;
+                    queue.offer(new Node(node.to, distance[node.to]));
+                }
+            }
+        }
+
+        System.out.println(distance[N]);
+    }
+
+    static class Node implements Comparable<Node> {
+        int to;
+        int weight;
+        public Node (int to, int weight) {
+            this.to = to;
+            this.weight = weight;
+        }
+
+        @Override
+        public int compareTo(Node node) {
+            if (this.weight < node.weight) {
+                return -1;
+            }
+            return 1;
+        }
+    }
+
+}
