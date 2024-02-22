@@ -1,0 +1,100 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class 쿠키의_신체_측정 {
+
+    static String[][] board;
+    static int heart_x, heart_y;
+    static int waist_x, waist_y;
+    static int N;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        N = Integer.parseInt(br.readLine());
+
+        board = new String[N + 1][N + 1];
+        heart_x = 0;
+        heart_y = 0;
+        boolean headCheck = false;
+        for (int i = 1; i <= N; i++) {
+            String[] line = br.readLine().split("");
+            for (int j = 1; j <= N; j++) {
+                board[i][j] = line[j - 1];
+                if (board[i][j].equals("*") && !headCheck) {
+                    headCheck = true;
+                    heart_x = j;
+                    heart_y = i + 1;
+                }
+            }
+        }
+
+        int leftArm = leftArm();
+        int rightArm = rightArm();
+        int waist = waist();
+        int leftLeg = leftLeg();
+        int rightLeg = rightLeg();
+
+        System.out.println(heart_y + " " + heart_x);
+        System.out.println(leftArm + " " + rightArm + " " + waist + " " + leftLeg + " " + rightLeg);
+    }
+
+    static int leftArm() {
+        int len = 0;
+        for (int i = heart_x - 1; i > 0; i--) {
+            if (!board[heart_y][i].equals("*")) {
+                break;
+            }
+            len++;
+        }
+        return len;
+    }
+
+    static int rightArm() {
+        int len = 0;
+        for (int i = heart_x + 1; i <= N; i++) {
+            if (!board[heart_y][i].equals("*")) {
+                break;
+            }
+            len++;
+        }
+        return len;
+    }
+
+    static int waist() {
+        int len = 0;
+        for (int i = heart_y + 1; i <= N; i++) {
+            if (!board[i][heart_x].equals("*")) {
+                break;
+            }
+            len++;
+        }
+        waist_x = heart_x;
+        waist_y = heart_y + len;
+        return len;
+    }
+
+    static int leftLeg() {
+        int len = 0;
+        for (int i = waist_y + 1; i <= N; i++) {
+            if (!board[i][waist_x - 1].equals("*")) {
+                break;
+            }
+            len++;
+        }
+        return len;
+    }
+
+    static int rightLeg() {
+        int len = 0;
+        for (int i = waist_y + 1; i <= N; i++) {
+            if (!board[i][waist_x + 1].equals("*")) {
+                break;
+            }
+            len++;
+        }
+        return len;
+    }
+}
