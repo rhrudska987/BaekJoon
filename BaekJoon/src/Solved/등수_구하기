@@ -1,0 +1,57 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class 등수_구하기 {
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        int N = Integer.parseInt(st.nextToken());
+        int score = Integer.parseInt(st.nextToken());
+        int P = Integer.parseInt(st.nextToken());
+
+        if (N == 0) {
+            System.out.println("1");
+            System.exit(0);
+        }
+
+        int[] score_list = new int[P];
+        st = new StringTokenizer(br.readLine());
+        for (int i = 0; i < N; i++) {
+            score_list[i] = Integer.parseInt(st.nextToken());
+        }
+
+        List<Integer> list = new ArrayList<>();
+        int rank = -1;
+        for (int i = 0; i < P; i++) {
+            if (N < P && i == P-1) {
+                rank = i + 1;
+                break;
+            }
+            if (score > score_list[i]) {
+                rank = i + 1;
+                break;
+            }
+            if (score == score_list[i]) {
+                list.add(i + 1);
+            }
+        }
+
+        if (list.size() == 0) {
+            System.out.println(rank);
+        } else {
+            if (list.contains(P)) {
+                System.out.println(-1);
+            } else {
+                System.out.println(list.get(0));
+            }
+        }
+    }
+
+}
