@@ -1,0 +1,59 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class 햄버거_분배 {
+
+    static boolean[] eated;
+    static String[] table;
+    static int N, K;
+    static int answer = 0;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        K = Integer.parseInt(st.nextToken());
+        table = br.readLine().split("");
+        eated = new boolean[N];
+
+        for (int i = 0; i < N; i++) {
+            if (table[i].equals("P")) {
+                System.out.println("table: " + i);
+                if (!eat_left(i)) {
+                    System.out.print("right ");
+                    eat_right(i);
+                }
+            }
+        }
+        System.out.println(answer);
+
+    }
+
+    static boolean eat_left(int idx) {
+        for (int i = idx - K; i < idx; i++) {
+            if (i >= 0 && !eated[i] && table[i].equals("H")) {
+                System.out.println("idx: " + i);
+                answer++;
+                eated[i] = true;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static void eat_right(int idx) {
+        for (int i = idx + 1; i <= idx + K; i++) {
+            if (i < N && !eated[i] && table[i].equals("H")) {
+                System.out.println("idx: " + i);
+                answer++;
+                eated[i] = true;
+                break;
+            }
+        }
+    }
+
+}
