@@ -1,0 +1,59 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class 진우의_달_여행 {
+
+    static int N, M;
+    static int map[][];
+    static int answer = Integer.MAX_VALUE;
+    static int dx[] = {-1, 0, 1};
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer st = new StringTokenizer(br.readLine());
+        N = Integer.parseInt(st.nextToken());
+        M = Integer.parseInt(st.nextToken());
+        map = new int[N][M];
+
+        for (int i = 0; i < N; i++) {
+            st = new StringTokenizer(br.readLine());
+            for (int j = 0; j < M; j++) {
+                map[i][j] = Integer.parseInt(st.nextToken());
+            }
+        }
+
+        for (int i = 0; i < M; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (i + dx[j] < 0 || i + dx[j] >= M) {
+                    continue;
+                }
+                calc(1, i + dx[j], map[0][i], dx[j]);
+            }
+        }
+
+        System.out.println(answer);
+    }
+
+    static void calc(int y, int x, int fuel, int direction) {
+        if (y == N || fuel > answer) {
+            if (answer > fuel) {
+                answer = fuel;
+            }
+            return;
+        }
+
+        for (int i = 0; i < 3; i++) {
+            if (dx[i] == direction || x + dx[i] < 0 || x + dx[i] >= M) {
+                continue;
+            }
+            fuel += map[y][x];
+            calc(y + 1, x + dx[i], fuel, dx[i]);
+            fuel -= map[y][x];
+        }
+    }
+
+}
