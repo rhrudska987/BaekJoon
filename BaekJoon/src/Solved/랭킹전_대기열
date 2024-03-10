@@ -1,0 +1,66 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.StringTokenizer;
+
+public class 랭킹전_대기열 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int p = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
+
+		List<List<String[]>> roomList = new ArrayList<>();
+
+		for (int i = 0; i < p; i++) {
+			st = new StringTokenizer(br.readLine());
+			String l = st.nextToken();
+			String n = st.nextToken();
+			boolean full = true;
+			for (int j = 0; j < roomList.size(); j++) {
+				String[] headInfo = roomList.get(j).get(0);
+				if (roomList.get(j).size() == m ||
+					Integer.parseInt(l) > Integer.parseInt(headInfo[0]) + 10 ||
+					Integer.parseInt(l) < Integer.parseInt(headInfo[0]) - 10) {
+					continue;
+				}
+				String[] memberInfo = {l, n};
+				roomList.get(j).add(memberInfo);
+				full = false;
+				break;
+			}
+			if (full) {
+				String[] info = {l, n};
+				List<String[]> room = new ArrayList<>();
+				room.add(info);
+				roomList.add(room);
+			}
+		}
+
+		for (int i = 0; i < roomList.size(); i++) {
+			if (roomList.get(i).size() == m) {
+				System.out.println("Started!");
+			} else {
+				System.out.println("Waiting!");
+			}
+			Collections.sort(roomList.get(i), new Comparator<String[]>() {
+				@Override
+				public int compare(String[] o1, String[] o2) {
+					return o1[1].compareTo(o2[1]);
+				}
+			});
+			for (int j = 0; j < roomList.get(i).size(); j++) {
+				String[] info = roomList.get(i).get(j);
+				System.out.println(info[0] + " " + info[1]);
+			}
+		}
+	}
+
+}
