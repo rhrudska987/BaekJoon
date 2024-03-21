@@ -1,0 +1,32 @@
+package DynamicProgramming;
+
+public class 타겟_넘버 {
+	static int answer = 0;
+
+	static class Solution {
+		public int solution(int[] numbers, int target) {
+			int idx = 0;
+			int sum = 0;
+			dfs(numbers, target, sum, idx);
+			return answer;
+		}
+
+		static void dfs(int[] numbers, int target, int sum, int idx) {
+			if (idx == numbers.length) {
+				if (sum == target) {
+					answer++;
+				}
+				return;
+			}
+
+			dfs(numbers, target, sum + numbers[idx], idx + 1);
+			dfs(numbers, target, sum - numbers[idx], idx + 1);
+		}
+	}
+
+	public static void main(String[] args) {
+		Solution so = new Solution();
+		System.out.println(so.solution(new int[] {4, 1, 2, 1}, 4));
+	}
+
+}
