@@ -1,0 +1,65 @@
+package DynamicProgramming;
+
+import java.util.LinkedList;
+import java.util.Queue;
+
+public class 네트워크 {
+
+	static class Solution {
+		static boolean visited[][];
+
+		public int solution(int n, int[][] computers) {
+			int answer = 0;
+			visited = new boolean[n][n];
+
+			Queue<Network> queue = new LinkedList<>();
+			for (int i=0; i<n; i++) {
+				for (int j=0; j<n; j++) {
+					if (computers[i][j] == 1) {
+						queue.add(new Network(i, j));
+					}
+				}
+			}
+
+			while (!queue.isEmpty()) {
+				Network network = queue.poll();
+				if (visited[network.myNetwork][network.otherNetwork]) {
+					continue;
+				}
+				visited[network.myNetwork][network.otherNetwork] = true;
+				dfs(computers, n, network.myNetwork, network.otherNetwork);
+				answer++;
+			}
+
+			return answer;
+		}
+
+		private void dfs(int[][] computers, int n, int myNetwork, int otherNetwork) {
+			for (int i=0; i<n; i++) {
+				if (visited[otherNetwork][i] || computers[otherNetwork][i] == 0) {
+					continue;
+				}
+				visited[otherNetwork][i] = true;
+				dfs(computers, n, otherNetwork, i);
+			}
+		}
+
+		static class Network {
+			int myNetwork;
+			int otherNetwork;
+			public Network (int myNetwork, int otherNetwork) {
+				this.myNetwork = myNetwork;
+				this.otherNetwork = otherNetwork;
+			}
+		}
+	}
+
+	public static void main(String[] args) {
+		Solution so = new Solution();
+		int computers1[][] = {{1,1,0}, {1,1,0}, {0,0,1}};
+		int computers2[][] = {{1,1,0}, {1,1,1}, {0,1,1}};
+		System.out.println(so.solution(3, computers1));
+		System.out.println(so.solution(3, computers2));
+	}
+
+}
