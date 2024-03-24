@@ -1,0 +1,33 @@
+package DynamicProgramming;
+
+import java.util.Scanner;
+
+public class 문자열_교환 {
+
+	public static void main(String[] args) {
+		Scanner sc = new Scanner(System.in);
+		String line = sc.nextLine();
+		int aCnt = 0;
+		for (int i = 0; i < line.length(); i++) {
+			if (line.charAt(i) == 'a') {
+				aCnt++;
+			}
+		}
+
+		int min = Integer.MAX_VALUE;
+		int end = aCnt - 1;
+		for (int i=0; i<line.length(); i++) {
+			int bCnt = 0;
+			for (int j=i; j <= end; j++) {
+				if (line.charAt(j % line.length()) == 'b') {
+					bCnt++;
+				}
+			}
+			min = Math.min(min, bCnt);
+			end++;
+		}
+
+		System.out.println(min);
+	}
+
+}
