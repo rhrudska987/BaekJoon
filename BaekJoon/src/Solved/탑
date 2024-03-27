@@ -1,0 +1,47 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Stack;
+import java.util.StringTokenizer;
+
+public class 탑 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int[] height = new int[N];
+		for (int i = 0; i < N; i++) {
+			height[i] = Integer.parseInt(st.nextToken());
+		}
+
+		int[] answer = new int[N];
+		Stack<Top> stack = new Stack<>();
+		stack.add(new Top(height[N - 1], N - 1));
+		for (int i = N - 2; i >= 0; i--) {
+			while (!stack.isEmpty() && height[i] >= stack.peek().height) {
+				answer[stack.peek().location] = i + 1;
+				stack.pop();
+			}
+			stack.add(new Top(height[i], i));
+		}
+
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < N; i++) {
+			sb.append(answer[i] + " ");
+		}
+		System.out.println(sb);
+	}
+
+	static class Top {
+		int height;
+		int location;
+		public Top(int height, int location) {
+			this.height = height;
+			this.location = location;
+		}
+	}
+
+}
