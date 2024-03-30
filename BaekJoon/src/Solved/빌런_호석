@@ -1,0 +1,73 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class 빌런_호석 {
+
+	static int N;
+	static int K;
+	static int P;
+	static int X;
+	static int display[][] = {
+		{1, 1, 1, 1, 1, 1, 0},
+		{0, 1, 1, 0, 0, 0, 0},
+		{1, 1, 0, 1, 1, 0, 1},
+		{1, 1, 1, 1, 0, 0, 1},
+		{0, 1, 1, 0, 0, 1, 1},
+		{1, 0, 1, 1, 0, 1, 1},
+		{1, 0, 1, 1, 1, 1, 1},
+		{1, 1, 1, 0, 0, 0, 0},
+		{1, 1, 1, 1, 1, 1, 1},
+		{1, 1, 1, 1, 0, 1, 1}
+	};
+	static long answer = 0;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		N = Integer.parseInt(st.nextToken());
+		K = Integer.parseInt(st.nextToken());
+		P = Integer.parseInt(st.nextToken());
+		X = Integer.parseInt(st.nextToken());
+
+		int num[] = numToDigit(X);
+
+		for (int i = 1; i <= N; i++) {
+			if (i == X) {
+				continue;
+			}
+			int cnt = 0;
+			int change[] = numToDigit(i);
+			for (int j = 0; j < K; j++) {
+				cnt += changeCnt(num[j], change[j]);
+			}
+			if (cnt <= P) {
+				answer++;
+			}
+		}
+		System.out.println(answer);
+	}
+
+	static int changeCnt(int origin, int change) {
+		int cnt = 0;
+		for (int i = 0; i < 7; i++) {
+			if (display[origin][i] != display[change][i]) {
+				cnt++;
+			}
+		}
+		return cnt;
+	}
+
+	static int[] numToDigit(int num) {
+		int[] digit = new int[K];
+		for (int i = K - 1; i >= 0; i--) {
+			digit[i] = num % 10;
+			num /= 10;
+		}
+		return digit;
+	}
+
+}
