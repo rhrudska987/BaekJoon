@@ -1,0 +1,43 @@
+package DynamicProgramming;
+
+import java.util.Stack;
+
+public class 올바른_괄호 {
+
+	static class Solution {
+		boolean solution(String s) {
+			boolean answer = true;
+			Stack<Character> leftStack = new Stack<>();
+			Stack<Character> rightStack = new Stack<>();
+
+			for (int i = 0; i < s.length(); i++) {
+				leftStack.add(s.charAt(i));
+			}
+
+			while (!leftStack.isEmpty()) {
+				while (!leftStack.isEmpty() && leftStack.peek() == ')') {
+					rightStack.add(leftStack.pop());
+				}
+				while (!leftStack.isEmpty() && !rightStack.isEmpty() && leftStack.peek() == '(') {
+					leftStack.pop();
+					rightStack.pop();
+				}
+				if (!leftStack.isEmpty() && rightStack.isEmpty() && leftStack.peek() == '(') {
+					answer = false;
+					break;
+				}
+			}
+			if (!rightStack.isEmpty()) {
+				answer = false;
+			}
+
+			return answer;
+		}
+	}
+
+	public static void main(String[] args) {
+		Solution so = new Solution();
+		System.out.println(so.solution(")(())"));
+	}
+
+}
