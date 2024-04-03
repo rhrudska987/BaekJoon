@@ -1,0 +1,52 @@
+package DynamicProgramming;
+
+import java.util.Stack;
+
+public class 주식가격 {
+
+	static class Solution {
+		public int[] solution(int[] prices) {
+			int[] answer = new int[prices.length];
+			Stack<Stock> st = new Stack<>();
+			st.add(new Stock(prices[0], 0));
+			for (int i=1; i<prices.length; i++) {
+				while(!st.isEmpty()) {
+					Stock stock = st.peek();
+					if (prices[i] >= stock.price) {
+						break;
+					}
+					answer[stock.idx] = i - stock.idx;
+					st.pop();
+				}
+				st.add(new Stock(prices[i], i));
+			}
+
+			while(!st.isEmpty()) {
+				Stock stock = st.pop();
+				answer[stock.idx] = prices.length - 1 - stock.idx;
+			}
+
+			return answer;
+		}
+	}
+
+	static class Stock {
+		int price;
+		int idx;
+
+		public Stock(int price, int idx) {
+			this.price = price;
+			this.idx = idx;
+		}
+
+	}
+
+	public static void main(String[] args) {
+		Solution so = new Solution();
+		int[] answer = so.solution(new int[] {1, 2, 3, 2, 3});
+		for (int i = 0; i < answer.length; i++) {
+			System.out.println(answer[i]);
+		}
+	}
+
+}
