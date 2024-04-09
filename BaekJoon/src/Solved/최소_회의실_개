@@ -1,0 +1,49 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class 최소_회의실_개수 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = null;
+		int N = Integer.parseInt(br.readLine());
+		long meeting[][] = new long[N][2];
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine());
+			meeting[i][0] = Long.parseLong(st.nextToken());
+			meeting[i][1] = Long.parseLong(st.nextToken());
+		}
+
+		Arrays.sort(meeting, new Comparator<long[]>() {
+			@Override
+			public int compare(long[] o1, long[] o2) {
+				if (o1[0] == o2[0]) {
+					return (int)(o1[1] - o2[1]);
+				}
+				return (int)(o1[0] - o2[0]);
+			}
+		});
+
+		PriorityQueue<Long> pq = new PriorityQueue<>();
+		pq.add(meeting[0][1]);
+		int roomCnt = 1;
+		for (int i = 1; i < N; i++) {
+			if (pq.peek() > meeting[i][0]) {
+				roomCnt++;
+			} else {
+				pq.poll();
+			}
+			pq.add(meeting[i][1]);
+		}
+
+		System.out.println(roomCnt);
+	}
+
+}
