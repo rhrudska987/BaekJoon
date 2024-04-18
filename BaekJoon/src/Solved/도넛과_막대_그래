@@ -1,0 +1,56 @@
+package DynamicProgramming;
+
+import java.util.HashMap;
+import java.util.Map;
+
+public class 도넛과_막대_그래프 {
+
+	static class Solution {
+		public int[] solution(int[][] edges) {
+			Map<Integer, int[]> graph = new HashMap<>();
+			for (int i=0; i<edges.length; i++) {
+				if (!graph.containsKey(edges[i][0])) {
+					graph.put(edges[i][0], new int[]{0, 0});
+				}
+				if (!graph.containsKey(edges[i][1])) {
+					graph.put(edges[i][1], new int[]{0, 0});
+				}
+				//0이 input, 1이 output 개수
+				graph.get(edges[i][0])[1]++;
+				graph.get(edges[i][1])[0]++;
+			}
+
+			int nodeNum = 0;
+			int stickCnt = 0;
+			int eightCnt = 0;
+			for (int key : graph.keySet()) {
+				int inputCnt = graph.get(key)[0];
+				int outputCnt = graph.get(key)[1];
+				System.out.println("key: " + key + ", input: " + inputCnt +", output: " + outputCnt);
+				//생성 노드는 input이 없고, output이 2개 이상이다.
+				if (inputCnt == 0 && outputCnt >= 2) {
+					nodeNum = key;
+				} else if (inputCnt >= 1 && outputCnt == 0) {
+					stickCnt++;
+				} else if (inputCnt >= 2 && outputCnt >= 2) {
+					eightCnt++;
+				}
+			}
+			//도넛은 생성 노드 ouput에서 막대와 8자를 뺀 값
+			int donutCnt = graph.get(nodeNum)[1] - stickCnt - eightCnt;
+
+			int[] answer = {nodeNum, donutCnt, stickCnt, eightCnt};
+			return answer;
+		}
+	}
+
+	public static void main(String[] args) {
+		Solution so = new Solution();
+		int arr[] = so.solution(new int[][] {{2,3}, {4,3}, {1,1}, {2,1}});
+		System.out.println(arr[0]);
+		System.out.println(arr[1]);
+		System.out.println(arr[2]);
+		System.out.println(arr[3]);
+	}
+
+}
