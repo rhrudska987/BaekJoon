@@ -1,0 +1,75 @@
+package DynamicProgramming;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
+
+public class 석유_시추 {
+
+	static int[][] board;
+	static boolean[][] visited;
+	static int[] dx = {1, 0, -1, 0};
+	static int[] dy = {0, 1, 0, -1};
+	static int cnt;
+
+	static class Solution {
+		public int solution(int[][] land) {
+			HashMap<Integer, Integer> map = new HashMap<>();
+			board = new int[land.length][land[0].length];
+			visited = new boolean[land.length][land[0].length];
+
+			int oilNum = 1;
+			for (int i=0; i<land.length; i++) {
+				for (int j=0; j<land[0].length; j++) {
+					if (!visited[i][j] && land[i][j] == 1) {
+						cnt = 0;
+						board[i][j] = oilNum;
+						find(oilNum, i, j, land);
+						if (cnt == 0) {
+							map.put(oilNum, 1);
+						} else {
+							map.put(oilNum, cnt);
+						}
+						oilNum++;
+					}
+				}
+			}
+
+			int answer = 0;
+			Set<Integer> set = new HashSet<>();
+			for (int i=0; i<land[0].length; i++) {
+				int sum = 0;
+				for (int j=0; j<land.length; j++) {
+					if (board[j][i] == 0 || set.contains(board[j][i])) {
+						continue;
+					}
+					set.add(board[j][i]);
+					sum += map.get(board[j][i]);
+				}
+				answer = Math.max(answer, sum);
+				set.clear();
+			}
+			return answer;
+		}
+	}
+
+	private static void find(int oilNum, int y, int x, int[][] land) {
+		for (int i=0; i<4; i++) {
+			int nextY = y + dy[i];
+			int nextX = x + dx[i];
+			if (nextX < 0 || nextX >= board[0].length || nextY < 0 || nextY >= board.length || visited[nextY][nextX] || land[nextY][nextX] == 0) {
+				continue;
+			}
+			board[nextY][nextX] = oilNum;
+			visited[nextY][nextX] = true;
+			cnt++;
+			find(oilNum, nextY, nextX, land);
+		}
+	}
+
+	public static void main(String[] args) {
+		Solution so = new Solution();
+		System.out.println(so.solution(new int[][] {{1, 0, 1, 0, 1, 1}, {1, 0, 1, 0, 0, 0}, {1, 0, 1, 0, 0, 1}, {1, 0, 0, 1, 0, 0}, {1, 0, 0, 1, 0, 1}, {1, 0, 0, 0, 0, 0}, {1, 1, 1, 1, 1, 1}}));
+	}
+
+}
