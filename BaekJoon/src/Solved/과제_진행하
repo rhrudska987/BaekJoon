@@ -1,0 +1,88 @@
+package DynamicProgramming;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.Stack;
+
+public class 과제_진행하기 {
+
+	static class Solution {
+		public String[] solution(String[][] plans) {
+			Arrays.sort(plans, new Comparator<String[]>() {
+				@Override
+				public int compare(String[] o1, String[] o2) {
+					return o1[1].compareTo(o2[1]);
+				}
+			});
+
+			for (int i = 0; i < plans.length; i++) {
+				String[] str = plans[i][1].split(":");
+				int minute = 60 * Integer.parseInt(str[0]) + Integer.parseInt(str[1]);
+				plans[i][1] = String.valueOf(minute);
+			}
+
+			String[] answer = new String[plans.length];
+			Stack<Assignment> stack = new Stack<>();
+			int answerIdx = 0;
+			int time = Integer.parseInt(plans[0][1]);
+			for (int i = 0; i < plans.length; i++) {
+				int curStartTime = Integer.parseInt(plans[i][1]);
+				int curPlayTime = Integer.parseInt(plans[i][2]);
+				while (!stack.isEmpty()) {
+					if (time < curStartTime) {
+						Assignment assignment = stack.pop();
+						if (time + assignment.playTime <= curStartTime) {
+							answer[answerIdx++] = assignment.name;
+							time += assignment.playTime;
+						} else {
+							stack.add(new Assignment(assignment.name, time + assignment.playTime - curStartTime));
+							time = curStartTime;
+							break;
+						}
+					} else {
+						break;
+					}
+				}
+
+				if (i + 1 == plans.length) {
+					answer[answerIdx++] = plans[i][0];
+					break;
+				}
+				if (curStartTime + curPlayTime <= Integer.parseInt(plans[i + 1][1])) {
+					answer[answerIdx++] = plans[i][0];
+					time = curStartTime + curPlayTime;
+				} else {
+					stack.add(
+						new Assignment(plans[i][0], curStartTime + curPlayTime - Integer.parseInt(plans[i + 1][1])));
+					time = Integer.parseInt(plans[i + 1][1]);
+				}
+			}
+
+			while (!stack.isEmpty()) {
+				answer[answerIdx++] = stack.pop().name;
+			}
+			return answer;
+		}
+
+		static class Assignment {
+			String name;
+			int playTime;
+
+			public Assignment(String name, int playTime) {
+				this.name = name;
+				this.playTime = playTime;
+			}
+
+		}
+	}
+
+	public static void main(String[] args) {
+		Solution so = new Solution();
+		String[] result = so.solution(
+			new String[][] {{"science", "12:40", "50"}, {"music", "12:20", "40"}, {"history", "15:00", "30"}, {"computer", "12:30", "100"}});
+		for (int i = 0; i < result.length; i++) {
+			System.out.println(result[i]);
+		}
+	}
+
+}
