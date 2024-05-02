@@ -1,0 +1,53 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class 귀여운_라이언 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int K = Integer.parseInt(st.nextToken());
+
+		st = new StringTokenizer(br.readLine());
+		int doll[] = new int[N];
+		for (int i = 0; i < N; i++) {
+			doll[i] = Integer.parseInt(st.nextToken());
+		}
+
+		int min = Integer.MAX_VALUE;
+		int cnt = 0;
+		int l = 0;
+		int r = 0;
+		while (r < N) {
+			if (doll[r] == 1) {
+				cnt++;
+			}
+			if (doll[r] == 1 && cnt == K) {
+				while (doll[l] != 1) {
+					l++;
+				}
+				min = Math.min(min, r - l + 1);
+			} else if (cnt == K + 1) {
+				l++;
+				cnt--;
+				while (doll[l] != 1) {
+					l++;
+				}
+				min = Math.min(min, r - l + 1);
+			}
+			r++;
+		}
+
+		if (min == Integer.MAX_VALUE) {
+			System.out.println(-1);
+		} else {
+			System.out.println(min);
+		}
+	}
+
+}
