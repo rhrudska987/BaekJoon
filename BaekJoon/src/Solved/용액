@@ -1,0 +1,45 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class 용액 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int[] ph = new int[N];
+		for (int i=0; i<N; i++) {
+			ph[i] = Integer.parseInt(st.nextToken());
+		}
+
+		int minPH = Integer.MAX_VALUE;
+		int a = 0;
+		int b = 0;
+		int left = 0;
+		int right = N-1;
+		while (left < right) {
+			int mix = ph[right] + ph[left];
+			if (minPH > Math.abs(mix)) {
+				minPH = Math.abs(mix);
+				a = ph[left];
+				b = ph[right];
+			}
+			if (mix == 0) {
+				a = ph[left];
+				b = ph[right];
+				break;
+			} else if (mix < 0) {
+				left++;
+			} else {
+				right--;
+			}
+		}
+
+		System.out.println(a + " " + b);
+	}
+
+}
