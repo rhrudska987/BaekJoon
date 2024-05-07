@@ -1,0 +1,61 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
+public class 촌수계산 {
+
+	static int n;
+	static boolean[][] relationShip;
+	static boolean[] visited;
+	static int person1, person2;
+	static int ans = 0;
+	static boolean find = false;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		n = Integer.parseInt(br.readLine());
+		relationShip = new boolean[n + 1][n + 1];
+		visited = new boolean[n + 1];
+
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		person1 = Integer.parseInt(st.nextToken());
+		person2 = Integer.parseInt(st.nextToken());
+
+		int m = Integer.parseInt(br.readLine());
+		for (int i = 0; i < m; i++) {
+			st = new StringTokenizer(br.readLine());
+			int parent = Integer.parseInt(st.nextToken());
+			int child = Integer.parseInt(st.nextToken());
+			relationShip[parent][child] = true;
+			relationShip[child][parent] = true;
+		}
+
+		visited[person1] = true;
+		dfs(person1, 0);
+		if (find) {
+			System.out.println(ans);
+		} else {
+			System.out.println(-1);
+		}
+	}
+
+	private static void dfs(int personNum, int cnt) {
+		if (personNum == person2) {
+			find = true;
+			ans = cnt;
+			return;
+		}
+
+		for (int i = 1; i <= n; i++) {
+			if (relationShip[personNum][i] && !visited[i]) {
+				visited[i] = true;
+				dfs(i, cnt + 1);
+				visited[i] = false;
+			}
+		}
+	}
+
+}
