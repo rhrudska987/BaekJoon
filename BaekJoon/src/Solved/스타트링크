@@ -1,0 +1,60 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.StringTokenizer;
+
+public class 스타트링크 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int F = Integer.parseInt(st.nextToken());
+		int S = Integer.parseInt(st.nextToken());
+		int G = Integer.parseInt(st.nextToken());
+		int U = Integer.parseInt(st.nextToken());
+		int D = Integer.parseInt(st.nextToken());
+		boolean[] visited = new boolean[F + 1];
+
+		int ans = Integer.MAX_VALUE;
+
+		Queue<FloorInfo> q = new LinkedList<>();
+		q.add(new FloorInfo(S, 0));
+
+		while(!q.isEmpty()) {
+			FloorInfo floorInfo = q.poll();
+			int floor = floorInfo.floor;
+			int cnt = floorInfo.cnt;
+			if (floor == G) {
+				ans = cnt;
+				break;
+			}
+			if (floor < 1 || floor > F || visited[floor]) {
+				continue;
+			}
+			visited[floor] = true;
+			q.add(new FloorInfo(floor + U, cnt + 1));
+			q.add(new FloorInfo(floor - D, cnt + 1));
+		}
+
+		if (ans == Integer.MAX_VALUE) {
+			System.out.println("use the stairs");
+		} else {
+			System.out.println(ans);
+		}
+	}
+
+	static class FloorInfo {
+		int floor;
+		int cnt;
+
+		public FloorInfo(int floor, int cnt) {
+			this.floor = floor;
+			this.cnt = cnt;
+		}
+	}
+
+}
