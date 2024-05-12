@@ -1,0 +1,58 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class 개똥벌레 {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int H = Integer.parseInt(st.nextToken());
+
+		int[] up = new int[N / 2];
+		int[] down = new int[N / 2];
+		for (int i = 0; i < N / 2; i++) {
+			down[i] = Integer.parseInt(br.readLine());
+			up[i] = Integer.parseInt(br.readLine());
+		}
+
+		Arrays.sort(up);
+		Arrays.sort(down);
+
+		int min = N;
+		int cnt = 0;
+		for (int i = 1; i <= H; i++) {
+			int wallCnt = solve(0, N / 2, H - i + 1, up) + solve(0, N / 2, i, down);
+
+			if (wallCnt == min) {
+				cnt++;
+				continue;
+			}
+			if (min > wallCnt) {
+				min = wallCnt;
+				cnt = 1;
+			}
+		}
+
+		System.out.println(min + " " + cnt);
+	}
+
+	private static int solve(int left, int right, int h, int[] arr) {
+		while (left < right) {
+			int mid = (left + right) / 2;
+
+			if (arr[mid] < h) {
+				left = mid + 1;
+			} else {
+				right = mid;
+			}
+		}
+		return arr.length - right;
+	}
+
+}
