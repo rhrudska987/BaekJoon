@@ -1,0 +1,57 @@
+package DynamicProgramming;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class 공유기_설치 {
+
+	static int X[];
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+
+		int N = Integer.parseInt(st.nextToken());
+		int C = Integer.parseInt(st.nextToken());
+		X = new int[N];
+		for (int i = 0; i < N; i++) {
+			X[i] = Integer.parseInt(br.readLine());
+		}
+
+		Arrays.sort(X);
+
+		int l = 1;
+		int r = X[N - 1] - X[0] + 1;
+		while (l < r) {
+			int mid = (l + r) / 2;
+
+			if (installCnt(mid) >= C) {
+				l = mid + 1;
+			} else {
+				r = mid;
+			}
+		}
+
+		System.out.println(l - 1);
+	}
+
+	private static int installCnt(int distance) {
+		int cnt = 1;
+		int nowLocate = X[0];
+
+		for (int i = 1; i < X.length; i++) {
+			int nextLocate = X[i];
+
+			if (nextLocate - nowLocate >= distance) {
+				cnt++;
+				nowLocate = nextLocate;
+			}
+		}
+
+		return cnt;
+	}
+
+}
