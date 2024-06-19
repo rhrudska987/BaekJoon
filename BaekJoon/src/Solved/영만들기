@@ -29,6 +29,7 @@ public class 영만들기 {
 			System.out.println();
 		}
 
+		br.close();
 	}
 
 	static void brute(int idx) {
