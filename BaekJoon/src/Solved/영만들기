@@ -1,0 +1,90 @@
+package a0619.recu;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
+public class 영만들기 {
+	static int N;
+	static final String[] operator = {" ", "+", "-"};
+	static StringBuilder sb;
+	static List<Integer> numList;
+	static List<String> opList;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		int T = Integer.parseInt(br.readLine());
+		while (T-- > 0) {
+			N = Integer.parseInt(br.readLine());
+			opList = new ArrayList<>();
+			numList = new ArrayList<>();
+			for (int i = 0; i < N; i++) {
+				numList.add(i + 1);
+			}
+			
+			brute(0);
+			System.out.println();
+		}
+
+	}
+
+	static void brute(int idx) {
+		if (idx == N - 1) {
+			List<Integer> copyNumList = new ArrayList<>(numList);
+			List<String> copyOpList = new ArrayList<>(opList);
+			
+			//공백 먼저 계산하기
+			for (int i = 0; i<copyOpList.size(); i++) {
+				if (copyOpList.get(i).equals(" ")) {
+					int num = copyNumList.get(i) * 10 + copyNumList.get(i + 1);
+					copyOpList.remove(i);
+					copyNumList.remove(i + 1);
+					copyNumList.set(i, num);
+					i--;
+				}
+			}
+			
+			int sum = calc(copyNumList, copyOpList);
+			if (sum == 0) {
+				printAnswer();
+			}
+			return;
+		}
+
+		for (int j = 0; j<3; j++) {
+			opList.add(operator[j]);
+			brute(idx + 1);
+			opList.remove(opList.size() - 1);
+		}
+
+	}
+	
+	static int calc(List<Integer> copyNumList, List<String> copyOpList) {
+		int sum = copyNumList.get(0);
+		for (int i = 0; i < copyOpList.size(); i++) {
+			if (copyOpList.get(i).equals("+")) {
+				sum += copyNumList.get(i + 1);
+			} else {
+				sum -= copyNumList.get(i + 1);
+			}
+		}
+		
+		return sum;
+	}
+	
+	static void printAnswer() {
+		sb = new StringBuilder();
+		for (int i = 0; i < numList.size(); i++) {
+			sb.append(numList.get(i));
+			if (i == N - 1) {
+				break;
+			}
+			sb.append(opList.get(i));
+		}
+		System.out.println(sb.toString());
+	}
+	
+}
