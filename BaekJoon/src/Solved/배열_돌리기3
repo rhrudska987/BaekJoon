@@ -1,121 +1,196 @@
-package DynamicProgramming;
+package a0619.recu;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.StringTokenizer;
 
 public class 배열_돌리기3 {
 
-    public static void main(String[] args) throws IOException {
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        int N = Integer.parseInt(st.nextToken());
-        int M = Integer.parseInt(st.nextToken());
-        int R = Integer.parseInt(st.nextToken());
+	static int N;
+	static int M;
+	static int[][] arr;
 
-        int arr[][] = new int[N][M];
-        for (int i=0; i<N; i++){
-            st = new StringTokenizer(br.readLine());
-            for (int j=0; j<M; j++)
-                arr[i][j] = Integer.parseInt(st.nextToken());
-        }
-        st = new StringTokenizer(br.readLine());
-        int rotate[] = new int[R];
-        for (int i=0; i<R; i++)
-            rotate[i] = Integer.parseInt(st.nextToken());
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+		
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		int R = Integer.parseInt(st.nextToken());
 
-        for (int i=0; i<R; i++){
-            if(rotate[i] == 1) {
-                for (int j=0; j<M; j++){
-                    for (int k=0; k<N/2; k++){
-                        int tmp = arr[k][j];
-                        arr[k][j] = arr[N-1-k][j];
-                        arr[N-1-k][j] = tmp;
-                    }
-                }
-            }
-            else if(rotate[i] == 2) {
-                for (int j=0; j<N; j++){
-                    for (int k=0; k<M/2; k++){
-                        int tmp = arr[j][k];
-                        arr[j][k] = arr[j][M-1-k];
-                        arr[j][M-1-k] = tmp;
-                    }
-                }
-            }
-            else if (rotate[i] == 3) {
-                int rotateArr[][] = new int[M][N];
-                for(int j=0; j<N; j++){
-                    for(int k=0; k<M; k++){
-                        rotateArr[k][N-j-1] =  arr[j][k];
-                    }
-                }
-                int tmp = N;
-                N = M;
-                M = tmp;
-                arr = rotateArr;
-            }
-            else if(rotate[i] == 4){
-                int rotateArr[][] = new int[M][N];
-                for(int j=0; j<N; j++){
-                    for(int k=0; k<M; k++){
-                        rotateArr[M-k-1][j] =  arr[j][k];
-                    }
-                }
-                int tmp = N;
-                N = M;
-                M = tmp;
-                arr = rotateArr;
-            }
-            else if (rotate[i] == 5){
-                int arr2[][] = new int[N][M];
-                for (int j=0; j<N/2; j++){ //1->2
-                    for (int k=0; k<M/2; k++)
-                        arr2[j][M/2+k] = arr[j][k];
-                }
-                for (int j=0; j<N/2; j++){ //2->3
-                    for (int k=M/2; k<M; k++)
-                        arr2[N/2+j][k] = arr[j][k];
-                }
-                for (int j=N/2; j<N; j++) { //3->4
-                    for (int k=M/2; k<M; k++)
-                        arr2[j][k-M/2] = arr[j][k];
-                }
-                for (int j=N/2; j<N; j++) { //4->1
-                    for (int k=0; k<M/2; k++)
-                        arr2[j-N/2][k] = arr[j][k];
-                }
-                arr = arr2;
-            }
-            else {
-                int arr2[][] = new int[N][M];
-                for (int j=0; j<N/2; j++){ //1->4
-                    for (int k=0; k<M/2; k++)
-                        arr2[N/2+j][k] = arr[j][k];
-                }
-                for (int j=N/2; j<N; j++){ //4->3
-                    for (int k=0; k<M/2; k++)
-                        arr2[j][k+M/2] = arr[j][k];
-                }
-                for (int j=N/2; j<N; j++) { //3->2
-                    for (int k=M/2; k<M; k++)
-                        arr2[j-N/2][k] = arr[j][k];
-                }
-                for (int j=0; j<N/2; j++) { //2->1
-                    for (int k=M/2; k<M; k++)
-                        arr2[j][k-M/2] = arr[j][k];
-                }
-                arr = arr2;
-            }
-        }
+		//행렬 입력
+		arr = new int[N][M];
+		for (int i = 0; i < N; i++) {
+			st = new StringTokenizer(br.readLine(), " ");
+			for (int j = 0; j < M; j++) {
+				arr[i][j] = Integer.parseInt(st.nextToken());
+			}
+		}
 
-        for (int i=0; i<N; i++){
-            for (int j=0; j<M; j++){
-                System.out.print(arr[i][j] + " ");
-            }
-            System.out.println();
-        }
-    }
+		//연산 수행
+		st = new StringTokenizer(br.readLine(), " ");
+		for (int i = 0; i < R; i++) {
+			int operation = Integer.parseInt(st.nextToken());
+			
+			if (operation == 1) {
+				topDownReverse();
+			} else if (operation == 2) {
+				leftRightReverse();
+			} else if (operation == 3) {
+				rightRotate();
+			} else if (operation == 4) {
+				leftRotate();
+			} else if (operation == 5) {
+				move1();
+			} else {
+				move2();
+			}
+		}
 
+		//결과 출력
+		StringBuilder sb = new StringBuilder();
+		for (int[] ia : arr) {
+			for (int i : ia) {
+				sb.append(i).append(" ");
+			}
+			sb.append("\n");
+		}
+		System.out.println(sb.toString());
+
+		br.close();
+	}
+
+	//상하 반전
+	static void topDownReverse() {
+		for (int j = 0; j < M; j++) {
+			for (int k = 0; k < N / 2; k++) {
+				int tmp = arr[k][j];
+				arr[k][j] = arr[N - 1 - k][j];
+				arr[N - 1 - k][j] = tmp;
+			}
+		}
+	}
+
+	//좌우 반전
+	static void leftRightReverse() {
+		for (int j = 0; j < N; j++) {
+			for (int k = 0; k < M / 2; k++) {
+				int tmp = arr[j][k];
+				arr[j][k] = arr[j][M - 1 - k];
+				arr[j][M - 1 - k] = tmp;
+			}
+		}
+	}
+
+	//오른쪽으로 90도 회전
+	static void rightRotate() {
+		int rotate_arr[][] = new int[M][N];
+		for (int j = 0; j < N; j++) {
+			for (int k = 0; k < M; k++) {
+				rotate_arr[k][N - j - 1] = arr[j][k];
+			}
+		}
+
+		//행과 열 변경
+		int tmp = N;
+		N = M;
+		M = tmp;
+		
+		//얕은 복사
+		arr = rotate_arr;
+	}
+
+	//왼쪽으로 90도 회전
+	static void leftRotate() {
+		int rotate_arr[][] = new int[M][N];
+		for (int j = 0; j < N; j++) {
+			for (int k = 0; k < M; k++) {
+				rotate_arr[M - k - 1][j] = arr[j][k];
+			}
+		}
+
+		//행과 열 변경
+		int tmp = N;
+		N = M;
+		M = tmp;
+		
+		//얕은 복사
+		arr = rotate_arr;
+	}
+
+	//부분 변경1
+	static void move1() {
+		int moved_arr[][] = new int[N][M];
+
+		//1->2
+		for (int j = 0; j < N / 2; j++) {
+			for (int k = 0; k < M / 2; k++) {
+				moved_arr[j][M / 2 + k] = arr[j][k];
+			}
+		}
+
+		//2->3
+		for (int j = 0; j < N / 2; j++) {
+			for (int k = M / 2; k < M; k++) {
+				moved_arr[N / 2 + j][k] = arr[j][k];
+			}
+		}
+
+		//3->4
+		for (int j = N / 2; j < N; j++) {
+			for (int k = M / 2; k < M; k++) {
+				moved_arr[j][k - M / 2] = arr[j][k];
+			}
+		}
+
+		//4->1
+		for (int j = N / 2; j < N; j++) {
+			for (int k = 0; k < M / 2; k++) {
+				moved_arr[j - N / 2][k] = arr[j][k];
+			}
+		}
+
+		//얕은 복사
+		arr = moved_arr;
+	}
+
+	//부분 변경2
+	static void move2() {
+		int moved_arr[][] = new int[N][M];
+
+		//1->4
+		for (int j = 0; j < N / 2; j++) {
+			for (int k = 0; k < M / 2; k++) {
+				moved_arr[N / 2 + j][k] = arr[j][k];
+			}
+		}
+
+		//4->3
+		for (int j = N / 2; j < N; j++) {
+			for (int k = 0; k < M / 2; k++) {
+				moved_arr[j][k + M / 2] = arr[j][k];
+			}
+		}
+
+		//3->2
+		for (int j = N / 2; j < N; j++) {
+			for (int k = M / 2; k < M; k++) {
+				moved_arr[j - N / 2][k] = arr[j][k];
+			}
+		}
+
+		//2->1
+		for (int j = 0; j < N / 2; j++) {
+			for (int k = M / 2; k < M; k++) {
+				moved_arr[j][k - M / 2] = arr[j][k];
+			}
+		}
+
+		//얕은 복사
+		arr = moved_arr;
+	}
 }
