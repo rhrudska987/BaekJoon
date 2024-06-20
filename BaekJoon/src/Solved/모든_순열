@@ -1,0 +1,44 @@
+package a0620.perm;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+
+public class 모든_순열 {
+
+	static int N;
+	static int[] arr;
+	static boolean[] visited;
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		N = Integer.parseInt(br.readLine());
+
+		arr = new int[N];
+		visited = new boolean[N];
+
+		brute(0);
+
+	}
+
+	static void brute(int idx) {
+		if (idx == N) {
+			for (int i = 0; i < N; i++) {
+				System.out.print(arr[i] + " ");
+			}
+			System.out.println();
+			return;
+		}
+
+		for (int i = 1; i <= N; i++) {
+			if (visited[i - 1]) {
+				continue;
+			}
+			
+			arr[idx] = i;
+			visited[i - 1] = true;
+			brute(idx + 1);
+			visited[i - 1] = false;
+		}
+	}
+}
