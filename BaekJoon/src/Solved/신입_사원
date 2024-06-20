@@ -1,0 +1,40 @@
+package a0620.perm;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Arrays;
+import java.util.StringTokenizer;
+
+public class 신입_사원 {
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = null;
+		StringBuilder sb = new StringBuilder();
+
+		int T = Integer.parseInt(br.readLine());
+		while (T-- > 0) {
+			int N = Integer.parseInt(br.readLine());
+			int[] score_arr = new int[N + 1];
+
+			for (int i = 0; i < N; i++) {
+				st = new StringTokenizer(br.readLine(), " ");
+				score_arr[Integer.parseInt(st.nextToken())] = Integer.parseInt(st.nextToken());
+			}
+
+			int cnt = 1;
+			int min = score_arr[1];
+			for (int i = 2; i <= N; i++) {
+				if (min > score_arr[i]) {
+					cnt++;
+					min = score_arr[i];
+				}
+			}
+
+			sb.append(cnt).append("\n");
+		}
+
+		System.out.println(sb.toString());
+		br.close();
+	}
+}
