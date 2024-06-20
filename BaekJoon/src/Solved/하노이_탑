@@ -1,0 +1,41 @@
+package a0620.perm;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.math.BigInteger;
+
+public class 하노이_탑 {
+	static BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+	
+	public static void main(String[] args) throws IOException{
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		int N = Integer.parseInt(br.readLine());
+		
+		BigInteger cnt = new BigInteger("2");
+		System.out.println(cnt.pow(N).subtract(new BigInteger("1")));
+		
+		if (N > 20) {
+			return;
+		}
+		
+		hanoi(N, 1, 2, 3);
+		
+		bw.flush();
+		bw.close();
+		br.close();
+	}
+	
+	static void hanoi(int n, int from, int mid, int to) throws IOException{
+		if (n == 0) {
+			return;
+		}
+		
+		hanoi(n - 1, from, to, mid);
+		bw.write(from + " " + to + "\n");
+		hanoi(n - 1, mid, from, to);
+	}
+	
+}
