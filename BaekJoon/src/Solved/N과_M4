@@ -1,32 +1,35 @@
 package DynamicProgramming;
 
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
 
 public class N과_M4 {
-    static int N, M;
-    static int arr[];
-    static StringBuilder sb = new StringBuilder();
+    static int N;
+	static int M;
+	static int[] arr;
+	
+	static void comb(int cnt, int start) {
+		if (cnt == M) {
+			for (int i = 0; i < M; i++) {
+				System.out.print(arr[i] + " ");
+			}
+			System.out.println();
+			return;
+		}
+		for (int i = start; i <= N; i++) {
+			arr[cnt] = i;
+			comb(cnt + 1, i + 1);
+		}
+	}
 
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        N = sc.nextInt();
-        M = sc.nextInt();
-        arr = new int[M];
-        backTracking(0, 1);
-        System.out.print(sb.toString());
-    }
-
-    static void backTracking(int cnt, int idx) {
-        if(cnt == M){
-            for (int i=0; i<M; i++)
-                sb.append(arr[i] + " ");
-            sb.append("\n");
-            return;
-        }
-
-        for (int i=idx; i<=N; i++) {
-            arr[cnt] = i;
-            backTracking(cnt+1, i);
-        }
-    }
+	public static void main(String[] args) throws Exception {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine(), " ");
+		N = Integer.parseInt(st.nextToken());
+		M = Integer.parseInt(st.nextToken());
+		arr = new int[M];
+		
+		comb(0, 1);
+	}
 }
