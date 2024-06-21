@@ -25,7 +25,7 @@ public class 도영이가_만든_맛있는_음식 {
 			bitter[i] = Integer.parseInt(st.nextToken());
 		}
 
-		subs(0, 0, 0);
+		subs(0, 0, 1);
 
 		System.out.println(min);
 		br.close();
@@ -36,19 +36,12 @@ public class 도영이가_만든_맛있는_음식 {
 			if (bitterSum == 0) {
 				return;
 			}
-
 			min = Math.min(min, Math.abs(bitterSum - sourSum));
 			return;
 		}
 
-		if (bitterSum == 0) {
-			subs(cnt + 1, bitter[cnt], 1 * sour[cnt]);
-			subs(cnt + 1, 0, 0);
-		} else {
-			subs(cnt + 1, bitterSum + bitter[cnt], sourSum * sour[cnt]);
-			subs(cnt + 1, bitterSum, sourSum);
-		}
-
+		subs(cnt + 1, bitterSum + bitter[cnt], sourSum * sour[cnt]);
+		subs(cnt + 1, bitterSum, sourSum);
 	}
 
 }
