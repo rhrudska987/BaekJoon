@@ -9,6 +9,7 @@ public class Main {
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = null;
+		StringBuilder sb = new StringBuilder();
 
 		int N = Integer.parseInt(br.readLine());
 		int[][] point_arr = new int[N][2];
@@ -30,9 +31,12 @@ public class Main {
 
 		for (int[] i : point_arr) {
 			for (int j : i) {
-				System.out.print(j + " ");
+				sb.append(j + " ");
 			}
-			System.out.println();
+			sb.append("\n");
 		}
+
+		System.out.println(sb.toString());
+		br.close();
 	}
 }
