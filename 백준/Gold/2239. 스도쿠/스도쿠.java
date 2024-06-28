@@ -1,13 +1,9 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 public class Main {
 	
-	static List<String> list = new ArrayList<>();
 	static int[][] sudoku = new int[9][9];
 	static StringBuilder sb = new StringBuilder();
 	static boolean find = false;
@@ -24,9 +20,7 @@ public class Main {
 		
 		solve(0, 0, 0);
 		
-		Collections.sort(list);
-		
-		System.out.println(list.get(0));
+		System.out.println(sb.toString());
 		br.close();
 	}
 	
@@ -36,15 +30,12 @@ public class Main {
 		}
 		
 		if (cnt == 81) {
-			String s = "";
 			for (int i = 0; i < 9; i++) {
 				for (int j = 0; j < 9; j++) {
-					s= s.concat(String.valueOf(sudoku[i][j]));
+					sb.append(sudoku[i][j]);
 				}
-				s= s.concat("\n");
+				sb.append("\n");
 			}
-            
-			list.add(s);
 			find = true;
 			return;
 		}
