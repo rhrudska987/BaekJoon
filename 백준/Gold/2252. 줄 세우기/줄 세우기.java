@@ -1,0 +1,54 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PriorityQueue;
+import java.util.StringTokenizer;
+
+public class Main {
+
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+		int N = Integer.parseInt(st.nextToken());
+		int M = Integer.parseInt(st.nextToken());
+
+		List<List<Integer>> graph = new ArrayList<>();
+		for (int i=0; i<=N; i++) {
+			graph.add(new ArrayList<>());
+		}
+
+		int[] inDegree = new int[N + 1];
+		for (int i=0; i<M; i++) {
+			st = new StringTokenizer(br.readLine());
+			int first = Integer.parseInt(st.nextToken());
+			int last = Integer.parseInt(st.nextToken());
+			graph.get(first).add(last);
+			inDegree[last]++;
+		}
+
+		PriorityQueue<Integer> pq = new PriorityQueue<>();
+
+		for (int i=1; i<=N; i++) {
+			if (inDegree[i] == 0) {
+				pq.add(i);
+			}
+		}
+
+		StringBuilder sb = new StringBuilder();
+		while (!pq.isEmpty()) {
+			int now = pq.poll();
+			sb.append(now +" ");
+			for (int i=0; i<graph.get(now).size(); i++) {
+				int node = graph.get(now).get(i);
+				inDegree[node]--;
+				if (inDegree[node] == 0) {
+					pq.add(node);
+				}
+			}
+		}
+		System.out.println(sb.toString());
+	}
+
+}
