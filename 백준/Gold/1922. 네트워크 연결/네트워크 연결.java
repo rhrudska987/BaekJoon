@@ -28,7 +28,7 @@ public class Main {
 			line[i][2] = Integer.parseInt(st.nextToken());
 		}
 
-		Arrays.sort(line, (o1, o2) -> Integer.compare(o1[2], o2[2]));
+		Arrays.parallelSort(line, (o1, o2) -> Integer.compare(o1[2], o2[2]));
 
 		int totalCost = 0;
 		for (int i = 0; i < M; i++) {
