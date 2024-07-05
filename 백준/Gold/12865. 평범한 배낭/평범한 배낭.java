@@ -1,6 +1,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
@@ -20,18 +21,16 @@ public class Main {
 			V[i] = Integer.parseInt(st.nextToken());
 		}
 
-		int[][] dp = new int[N + 1][K + 1];
+		int[] dp = new int[K + 1];
 		for (int i = 1; i <= N; i++) {
-			for (int j = 0; j <= K; j++) {
+			for (int j = K; j >= W[i]; j--) {
 				if (W[i] <= j) {
-					dp[i][j] = Math.max(dp[i - 1][j], V[i] + dp[i - 1][j - W[i]]);
-				} else {
-					dp[i][j] = dp[i - 1][j];
+					dp[j] = Math.max(dp[j], V[i] + dp[j - W[i]]);
 				}
 			}
 		}
 
-		System.out.println(dp[N][K]);
+		System.out.println(dp[K]);
 		br.close();
 	}
 }
